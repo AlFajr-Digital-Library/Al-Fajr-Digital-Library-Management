@@ -1159,6 +1159,109 @@
                 justify-content: flex-end;
             }
         }
+
+
+        /* أنماط مصدر الفيديو */
+.video-source-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.video-source-btn {
+    background: var(--darker-bg);
+    border: 1px solid var(--border-color);
+    padding: 10px 20px;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.video-source-btn.active {
+    background: var(--gradient-primary);
+    border-color: var(--accent-color);
+    color: white;
+}
+
+/* أنماط الصورة المصغرة */
+.thumbnail-upload-area {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: 20px;
+    text-align: center;
+}
+
+.thumbnail-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.thumbnail-img {
+    max-width: 200px;
+    max-height: 150px;
+    border-radius: var(--border-radius-sm);
+    object-fit: cover;
+}
+
+.thumbnail-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* معاينة الفيديو */
+.video-preview-box {
+    position: relative;
+    cursor: pointer;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+}
+
+.video-preview-img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.video-preview-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.video-preview-box:hover .video-preview-overlay {
+    opacity: 1;
+}
+
+.video-preview-overlay i {
+    font-size: 48px;
+}
+
+.video-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--text-muted);
+}
     </style>
 </head>
 <body>
@@ -1373,60 +1476,94 @@
                     </div>
                     
                     <!-- قسم الفيديو (للفيديوهات فقط) -->
-                    <div id="video-section" class="form-group full-width" style="display: none;">
-                        <div class="chapters-section">
-                            <h3 style="margin-bottom: 15px; color: var(--primary-color);">
-                                <i class="fas fa-video"></i> ملف الفيديو
-                            </h3>
-                            
-                            <div style="display: flex; flex-direction: column; gap: 15px;">
-                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                    <button type="button" class="action-btn" onclick="document.getElementById('video-upload').click()" 
-                                            style="background: var(--gradient-secondary);">
-                                        <i class="fas fa-upload"></i> رفع فيديو من الجهاز
-                                    </button>
-                                    <button type="button" class="action-btn" onclick="openGallery('videos')"
-                                            style="background: var(--gradient-accent);">
-                                        <i class="fas fa-video"></i> اختيار من معرض الفيديوهات
-                                    </button>
-                                </div>
-                                
-                                <input type="file" id="video-upload" accept="video/*" style="display: none;" 
-                                       onchange="handleVideoUpload(event)">
-                                
-                                <div id="video-preview-container" class="video-preview-container">
-                                    <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
-                                        <div style="flex: 1; min-width: 300px;">
-                                            <video id="video-preview" controls class="video-preview">
-                                                متصفحك لا يدعم تشغيل الفيديو
-                                            </video>
-                                        </div>
-                                        <div style="min-width: 200px;">
-                                            <div style="background: var(--darker-bg); padding: 15px; border-radius: var(--border-radius-sm);">
-                                                <h4 style="color: var(--text-primary); margin-bottom: 10px;">
-                                                    <i class="fas fa-info-circle"></i> معلومات الفيديو
-                                                </h4>
-                                                <div style="color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
-                                                    <div><strong>الحالة:</strong> <span id="video-status">لم يتم اختيار فيديو</span></div>
-                                                    <div><strong>المصدر:</strong> <span id="video-source">-</span></div>
-                                                    <div style="margin-top: 10px;">
-                                                        <button type="button" class="action-btn delete-btn" onclick="removeVideo()" 
-                                                                style="width: 100%; justify-content: center; padding: 8px;">
-                                                            <i class="fas fa-trash"></i> إزالة الفيديو
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <input type="hidden" id="product-video-base64">
-                                <input type="hidden" id="product-video-url">
-                                <div id="video-error" style="color: var(--error-color); font-size: 14px; display: none;"></div>
-                            </div>
+<!-- قسم الفيديو المعدل - ضع هذا داخل النموذج -->
+<div id="video-section" style="display: none;">
+    <div class="section-title">
+        <i class="fas fa-video"></i>
+        <h3>معلومات الفيديو</h3>
+    </div>
+    
+    <div class="video-source-tabs">
+        <button type="button" class="video-source-btn" id="video-source-device" onclick="switchVideoSource('device')">
+            <i class="fas fa-laptop"></i> رفع من الجهاز
+        </button>
+        <button type="button" class="video-source-btn" id="video-source-gallery" onclick="switchVideoSource('gallery')">
+            <i class="fas fa-photo-video"></i> معرض الفيديوهات
+        </button>
+        <button type="button" class="video-source-btn" id="video-source-youtube" onclick="switchVideoSource('youtube')">
+            <i class="fab fa-youtube"></i> يوتيوب
+        </button>
+    </div>
+    
+    <div id="device-video-section" style="display: none;">
+        <div class="form-group">
+            <label class="form-label">رفع فيديو من الجهاز</label>
+            <input type="file" id="video-upload" accept="video/*" style="display: none;" onchange="handleVideoUpload(event)">
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('video-upload').click()">
+                <i class="fas fa-upload"></i> اختيار فيديو
+            </button>
+            <input type="hidden" id="product-video-base64">
+        </div>
+    </div>
+    
+    <div id="gallery-video-section" style="display: none;">
+        <div class="form-group">
+            <label class="form-label">اختر فيديو من المعرض</label>
+            <button type="button" class="btn btn-secondary" onclick="openGallery('videos')">
+                <i class="fas fa-images"></i> اختيار من المعرض
+            </button>
+            <input type="hidden" id="product-video-url">
+        </div>
+    </div>
+    
+    <div id="youtube-video-section" style="display: none;">
+        <div class="form-group">
+            <label class="form-label">رابط يوتيوب</label>
+            <input type="text" id="product-youtube-url" class="form-input" 
+                   placeholder="https://www.youtube.com/watch?v=..." 
+                   oninput="handleYoutubeUrl()">
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">الصورة المصغرة للفيديو</label>
+            <div class="thumbnail-upload-area">
+                <div id="youtube-preview-container" style="display: none;">
+                    <div class="thumbnail-preview">
+                        <img id="youtube-thumbnail" class="thumbnail-img">
+                        <div class="thumbnail-actions">
+                            <button type="button" class="action-btn" onclick="document.getElementById('thumbnail-upload').click()">
+                                <i class="fas fa-upload"></i> رفع صورة
+                            </button>
+                            <button type="button" class="action-btn" onclick="openThumbnailGallery()">
+                                <i class="fas fa-images"></i> من المعرض
+                            </button>
+                            <button type="button" class="delete-btn" onclick="removeYoutubeThumbnail()">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
                     </div>
+                </div>
+                <input type="file" id="thumbnail-upload" accept="image/*" style="display: none;" onchange="uploadThumbnailForYoutube(event)">
+                <input type="hidden" id="selected-youtube-thumbnail">
+                <input type="hidden" id="product-video-thumbnail">
+            </div>
+        </div>
+    </div>
+    
+    <div id="video-preview-container" style="display: none;">
+        <div class="video-preview-box">
+            <div class="video-preview-overlay">
+                <i class="fas fa-play-circle"></i>
+                <span>معاينة الفيديو</span>
+            </div>
+            <img id="video-preview" class="video-preview-img">
+        </div>
+        <div class="video-info">
+            <span id="video-status"></span>
+            <span id="video-source"></span>
+        </div>
+    </div>
+</div>
                     
                     <div class="form-group full-width">
                         <label class="form-label">الوصف (عربي)</label>
@@ -1690,6 +1827,8 @@
     let galleryImages = [];
     let galleryVideos = [];
     let currentGalleryTab = 'images';
+    let currentVideoSource = 'device';
+    let youtubeVideoId = '';
     
     // متغيرات الملفات
     let uploadedFiles = [];
@@ -1705,7 +1844,7 @@
         'فيديوهات': ['الخيال السحري', 'الرعب', 'الغموض', 'السخرية', 'المغامرة', 'الخيال العلمي']
     };
     
-    const chapters = []; // لتخزين فصول الفيديو
+    const chapters = [];
     
     // أنواع الملفات المسموحة
     const allowedFileTypes = {
@@ -1794,6 +1933,150 @@
         }
     }
     
+    // ====== استخراج معرف يوتيوب ======
+    function extractYoutubeVideoId(url) {
+        if (!url) return null;
+        const patterns = [
+            /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+            /youtube\.com\/watch\?.*v=([^&\n?#]+)/
+        ];
+        
+        for (const pattern of patterns) {
+            const match = url.match(pattern);
+            if (match && match[1]) {
+                return match[1];
+            }
+        }
+        return null;
+    }
+    
+    // ====== الحصول على رابط الصورة المصغرة من يوتيوب ======
+    function getYoutubeThumbnailUrl(videoId, quality = 'hqdefault') {
+        return `https://img.youtube.com/vi/${videoId}/${quality}.jpg`;
+    }
+    
+    // ====== تبديل مصدر الفيديو ======
+    function switchVideoSource(source) {
+        currentVideoSource = source;
+        
+        document.getElementById('video-source-device').classList.remove('active');
+        document.getElementById('video-source-gallery').classList.remove('active');
+        document.getElementById('video-source-youtube').classList.remove('active');
+        
+        document.getElementById('device-video-section').style.display = 'none';
+        document.getElementById('gallery-video-section').style.display = 'none';
+        document.getElementById('youtube-video-section').style.display = 'none';
+        
+        if (source === 'device') {
+            document.getElementById('video-source-device').classList.add('active');
+            document.getElementById('device-video-section').style.display = 'block';
+        } else if (source === 'gallery') {
+            document.getElementById('video-source-gallery').classList.add('active');
+            document.getElementById('gallery-video-section').style.display = 'block';
+        } else if (source === 'youtube') {
+            document.getElementById('video-source-youtube').classList.add('active');
+            document.getElementById('youtube-video-section').style.display = 'block';
+        }
+    }
+    
+    // ====== معالجة رابط اليوتيوب ======
+    function handleYoutubeUrl() {
+        const youtubeUrl = document.getElementById('product-youtube-url').value.trim();
+        const youtubePreview = document.getElementById('youtube-preview-container');
+        const videoUrlField = document.getElementById('product-video-url');
+        
+        if (!youtubeUrl) {
+            youtubePreview.style.display = 'none';
+            videoUrlField.value = '';
+            youtubeVideoId = '';
+            document.getElementById('video-preview-container').style.display = 'none';
+            return;
+        }
+        
+        const videoId = extractYoutubeVideoId(youtubeUrl);
+        if (videoId) {
+            youtubeVideoId = videoId;
+            const thumbnailUrl = document.getElementById('selected-youtube-thumbnail').value || getYoutubeThumbnailUrl(videoId);
+            document.getElementById('youtube-thumbnail').src = thumbnailUrl;
+            document.getElementById('video-preview').src = thumbnailUrl;
+            youtubePreview.style.display = 'flex';
+            videoUrlField.value = youtubeUrl;
+            
+            document.getElementById('video-status').textContent = 'تم إضافة رابط يوتيوب';
+            document.getElementById('video-status').style.color = 'var(--success-color)';
+            document.getElementById('video-source').textContent = 'يوتيوب';
+            document.getElementById('video-preview-container').style.display = 'flex';
+            
+            showNotification('تم إضافة رابط اليوتيوب بنجاح', 'success');
+        } else {
+            showNotification('رابط يوتيوب غير صحيح', 'error');
+            youtubePreview.style.display = 'none';
+            videoUrlField.value = '';
+            youtubeVideoId = '';
+        }
+    }
+    
+    // ====== رفع صورة مصغرة لليوتيوب ======
+    async function uploadThumbnailForYoutube(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        if (!file.type.startsWith('image/')) {
+            showNotification('الرجاء اختيار ملف صورة', 'error');
+            return;
+        }
+        
+        if (file.size > 2 * 1024 * 1024) {
+            showNotification('حجم الصورة كبير جداً (الحد الأقصى 2MB)', 'error');
+            return;
+        }
+        
+        try {
+            const timestamp = Date.now();
+            const fileName = `thumbnail_${timestamp}_${file.name}`;
+            const storageReference = storageRef(firebaseStorage, `thumbnails/${fileName}`);
+            await uploadBytes(storageReference, file);
+            const downloadURL = await getDownloadURL(storageReference);
+            
+            document.getElementById('youtube-thumbnail').src = downloadURL;
+            document.getElementById('selected-youtube-thumbnail').value = downloadURL;
+            document.getElementById('product-video-thumbnail').value = downloadURL;
+            document.getElementById('video-preview').src = downloadURL;
+            
+            showNotification('تم رفع الصورة المصغرة بنجاح', 'success');
+        } catch (error) {
+            console.error('Error uploading thumbnail:', error);
+            showNotification('خطأ في رفع الصورة المصغرة', 'error');
+        }
+    }
+    
+    // ====== إزالة الصورة المصغرة ======
+    function removeYoutubeThumbnail() {
+        const youtubeUrl = document.getElementById('product-youtube-url').value;
+        const videoId = extractYoutubeVideoId(youtubeUrl);
+        
+        if (videoId) {
+            const defaultThumbnail = getYoutubeThumbnailUrl(videoId);
+            document.getElementById('youtube-thumbnail').src = defaultThumbnail;
+            document.getElementById('video-preview').src = defaultThumbnail;
+        } else {
+            document.getElementById('youtube-thumbnail').src = '';
+            document.getElementById('video-preview').src = '';
+        }
+        
+        document.getElementById('selected-youtube-thumbnail').value = '';
+        document.getElementById('product-video-thumbnail').value = '';
+        showNotification('تم إزالة الصورة المصغرة المخصصة', 'warning');
+    }
+    
+    // ====== اختيار صورة مصغرة من المعرض ======
+    let pendingThumbnailSelection = false;
+    
+    function openThumbnailGallery() {
+        pendingThumbnailSelection = true;
+        openGallery('images');
+    }
+    
     // ====== الحصول على أيقونة الملف ======
     function getFileIcon(fileType) {
         const icons = {
@@ -1875,7 +2158,6 @@
             document.getElementById('library-files-grid').style.display = 'block';
             document.getElementById('file-manager-upload-section').style.display = 'none';
             
-            // تحميل الملفات من مكتبة المنتجات
             loadProductLibraryFiles();
         }
     }
@@ -2042,7 +2324,6 @@
             selectedFiles.splice(index, 1);
         }
         
-        // تحديث العرض
         if (currentFileTab === 'uploaded') {
             renderGalleryFiles();
         } else {
@@ -2053,7 +2334,6 @@
     // ====== اختيار الملفات من المدير ======
     function selectFromFileManager() {
         try {
-            // إضافة الملفات المختارة إلى المنتج
             selectedFiles.forEach(file => {
                 if (!uploadedFiles.some(f => f.url === file.url)) {
                     uploadedFiles.push({
@@ -2066,10 +2346,7 @@
                 }
             });
             
-            // تحديث عرض الملفات المرفوعة
             renderUploadedFiles();
-            
-            // إغلاق مدير الملفات
             closeFileManager();
             
             showNotification(`تم إضافة ${selectedFiles.length} ملف(ات)`, 'success');
@@ -2102,20 +2379,17 @@
     
     // ====== رفع ملف واحد ======
     async function uploadSingleFile(file) {
-        // التحقق من نوع الملف
         if (!allowedFileTypes[file.type]) {
             showNotification(`نوع الملف ${file.name} غير مدعوم`, 'error');
             return;
         }
         
-        // التحقق من حجم الملف (100MB كحد أقصى)
         if (file.size > 100 * 1024 * 1024) {
             showNotification(`حجم الملف ${file.name} كبير جداً (الحد الأقصى 100MB)`, 'error');
             return;
         }
         
         try {
-            // عرض مؤشر التحميل
             const progressDiv = document.getElementById('upload-progress');
             const progressFill = document.getElementById('progress-fill');
             const progressText = document.getElementById('progress-text');
@@ -2126,25 +2400,18 @@
             progressText.textContent = `جاري رفع ${file.name}...`;
             totalSize.textContent = formatFileSize(file.size);
             
-            // إنشاء اسم فريد للملف
             const timestamp = Date.now();
             const randomString = Math.random().toString(36).substring(2, 15);
             const fileExtension = file.name.split('.').pop();
             const fileName = `${timestamp}_${randomString}.${fileExtension}`;
             
-            // رفع الملف إلى Firebase Storage
             const storageReference = storageRef(firebaseStorage, `gallery/files/${fileName}`);
-            
-            // تتبع تقدم الرفع
             const uploadTask = uploadBytes(storageReference, file);
             
-            // انتظار الانتهاء من الرفع
             await uploadTask;
             
-            // الحصول على رابط التنزيل
             const downloadURL = await getDownloadURL(storageReference);
             
-            // إضافة الملف إلى المصفوفة
             const uploadedFile = {
                 name: file.name,
                 url: downloadURL,
@@ -2155,11 +2422,8 @@
             };
             
             uploadedFiles.push(uploadedFile);
-            
-            // تحديث العرض
             renderUploadedFiles();
             
-            // إخفاء مؤشر التحميل
             progressDiv.style.display = 'none';
             progressFill.style.width = '0%';
             
@@ -2168,8 +2432,6 @@
         } catch (error) {
             console.error('Error uploading file:', error);
             showNotification(`خطأ في رفع ${file.name}`, 'error');
-            
-            // إخفاء مؤشر التحميل في حالة الخطأ
             document.getElementById('upload-progress').style.display = 'none';
         }
     }
@@ -2189,7 +2451,6 @@
                 await uploadSingleFile(file);
             }
             
-            // تحديث المعرض
             loadGalleryFiles();
             
             statusDiv.innerHTML = '<span style="color: var(--success-color);"><i class="fas fa-check"></i> تم الرفع بنجاح</span>';
@@ -2208,7 +2469,6 @@
         const name = prompt('أدخل اسم الملف:', 'ملف خارجي');
         if (!name) return;
         
-        // محاولة تحديد نوع الملف من الامتداد
         const extension = url.split('.').pop().toLowerCase().split('?')[0];
         const fileTypes = {
             'pdf': 'pdf',
@@ -2319,7 +2579,6 @@
                 <iframe src="${file.url}" class="pdf-preview"></iframe>
             `;
         } else if (file.type === 'txt') {
-            // محاولة قراءة الملف النصي
             fetch(file.url)
                 .then(response => response.text())
                 .then(text => {
@@ -2357,7 +2616,6 @@
     function switchGalleryTab(tab) {
         currentGalleryTab = tab;
         
-        // تحديث الأزرار النشطة
         document.getElementById('gallery-tab-images').classList.remove('active');
         document.getElementById('gallery-tab-videos').classList.remove('active');
         
@@ -2368,7 +2626,6 @@
             document.getElementById('image-upload-section').style.display = 'block';
             document.getElementById('video-upload-section').style.display = 'none';
             
-            // تحميل الصور إذا لم تكن محملة
             if (galleryImages.length === 0) {
                 loadGalleryImages();
             } else {
@@ -2381,7 +2638,6 @@
             document.getElementById('image-upload-section').style.display = 'none';
             document.getElementById('video-upload-section').style.display = 'block';
             
-            // تحميل الفيديوهات إذا لم تكن محملة
             if (galleryVideos.length === 0) {
                 loadGalleryVideos();
             } else {
@@ -2389,7 +2645,6 @@
             }
         }
         
-        // إعادة تعيين حالة الرفع
         document.getElementById('gallery-upload-status').innerHTML = '';
     }
     
@@ -2523,38 +2778,36 @@
     
     // ====== اختيار صورة من المعرض ======
     function selectGalleryImage(imageUrl, imageName) {
-        try {
-            // حفظ رابط الصورة
+        if (pendingThumbnailSelection) {
+            document.getElementById('youtube-thumbnail').src = imageUrl;
+            document.getElementById('selected-youtube-thumbnail').value = imageUrl;
+            document.getElementById('product-video-thumbnail').value = imageUrl;
+            document.getElementById('video-preview').src = imageUrl;
+            pendingThumbnailSelection = false;
+            closeGallery();
+            showNotification('تم اختيار الصورة المصغرة بنجاح', 'success');
+        } else {
             document.getElementById('product-image-base64').value = '';
             document.getElementById('product-image-url').value = imageUrl;
             
-            // عرض معاينة الصورة
             const preview = document.getElementById('preview-img');
             const previewContainer = document.getElementById('image-preview');
             
             preview.src = imageUrl;
             previewContainer.style.display = 'flex';
             
-            // تحديث حالة الصورة
             document.getElementById('image-error').style.display = 'none';
-            
-            // إغلاق المعرض
             closeGallery();
-            
             showNotification('تم اختيار الصورة بنجاح', 'success');
-        } catch (error) {
-            console.error('Error selecting image:', error);
-            showNotification('خطأ في اختيار الصورة', 'error');
         }
     }
     
     // ====== اختيار فيديو من المعرض ======
     function selectGalleryVideo(videoUrl, videoName) {
         try {
-            // حفظ رابط الفيديو
             document.getElementById('product-video-url').value = videoUrl;
+            document.getElementById('product-video-base64').value = '';
             
-            // عرض معاينة الفيديو
             const preview = document.getElementById('video-preview');
             const previewContainer = document.getElementById('video-preview-container');
             const videoStatus = document.getElementById('video-status');
@@ -2566,10 +2819,7 @@
                 videoStatus.textContent = 'تم اختيار الفيديو';
                 videoStatus.style.color = 'var(--success-color)';
                 videoSource.textContent = 'معرض الفيديوهات';
-                
-                // إغلاق المعرض
                 closeGallery();
-                
                 showNotification('تم اختيار الفيديو بنجاح', 'success');
             }
         } catch (error) {
@@ -2588,6 +2838,7 @@
     // ====== إغلاق المعرض ======
     function closeGallery() {
         document.getElementById('gallery-modal').style.display = 'none';
+        pendingThumbnailSelection = false;
     }
     
     // ====== رفع صور إلى المعرض ======
@@ -2602,32 +2853,26 @@
         
         try {
             for (const file of files) {
-                // التحقق من نوع الملف
                 if (!file.type.startsWith('image/')) {
                     showNotification('الملف يجب أن يكون صورة', 'error');
                     continue;
                 }
                 
-                // التحقق من حجم الملف (5MB كحد أقصى)
                 if (file.size > 5 * 1024 * 1024) {
                     showNotification('حجم الصورة كبير جداً (الحد الأقصى 5MB)', 'error');
                     continue;
                 }
                 
-                // إنشاء اسم فريد للملف
                 const timestamp = Date.now();
                 const randomString = Math.random().toString(36).substring(2, 15);
                 const fileExtension = file.name.split('.').pop();
                 const fileName = `image_${timestamp}_${randomString}.${fileExtension}`;
                 
-                // رفع الصورة إلى Storage
                 const storageReference = storageRef(firebaseStorage, `gallery/images/${fileName}`);
                 await uploadBytes(storageReference, file);
                 
-                // الحصول على رابط التنزيل
                 const downloadURL = await getDownloadURL(storageReference);
                 
-                // إضافة الصورة إلى المصفوفة
                 galleryImages.push({
                     name: fileName,
                     url: downloadURL,
@@ -2637,7 +2882,6 @@
                 showNotification(`تم رفع ${file.name} بنجاح`, 'success');
             }
             
-            // تحديث عرض المعرض
             renderGalleryImages();
             
             statusDiv.innerHTML = '<span style="color: var(--success-color);"><i class="fas fa-check"></i> تم الرفع بنجاح</span>';
@@ -2661,32 +2905,26 @@
         
         try {
             for (const file of files) {
-                // التحقق من نوع الملف
                 if (!file.type.startsWith('video/')) {
                     showNotification('الملف يجب أن يكون فيديو', 'error');
                     continue;
                 }
                 
-                // التحقق من حجم الملف (50MB كحد أقصى)
                 if (file.size > 50 * 1024 * 1024) {
                     showNotification('حجم الفيديو كبير جداً (الحد الأقصى 50MB)', 'error');
                     continue;
                 }
                 
-                // إنشاء اسم فريد للملف
                 const timestamp = Date.now();
                 const randomString = Math.random().toString(36).substring(2, 15);
                 const fileExtension = file.name.split('.').pop();
                 const fileName = `video_${timestamp}_${randomString}.${fileExtension}`;
                 
-                // رفع الفيديو إلى Storage
                 const storageReference = storageRef(firebaseStorage, `gallery/videos/${fileName}`);
                 await uploadBytes(storageReference, file);
                 
-                // الحصول على رابط التنزيل
                 const downloadURL = await getDownloadURL(storageReference);
                 
-                // إضافة الفيديو إلى المصفوفة
                 galleryVideos.push({
                     name: fileName,
                     url: downloadURL,
@@ -2696,7 +2934,6 @@
                 showNotification(`تم رفع ${file.name} بنجاح`, 'success');
             }
             
-            // تحديث عرض المعرض
             renderGalleryVideos();
             
             statusDiv.innerHTML = '<span style="color: var(--success-color);"><i class="fas fa-check"></i> تم الرفع بنجاح</span>';
@@ -2715,14 +2952,12 @@
         
         if (!file) return;
         
-        // التحقق من نوع الملف
         if (!file.type.startsWith('image/')) {
             errorDiv.textContent = 'الملف يجب أن يكون صورة (jpg, png, gif, etc.)';
             errorDiv.style.display = 'block';
             return;
         }
         
-        // التحقق من حجم الملف (2MB كحد أقصى)
         if (file.size > 2 * 1024 * 1024) {
             errorDiv.textContent = 'حجم الصورة كبير جداً (الحد الأقصى 2MB)';
             errorDiv.style.display = 'block';
@@ -2732,7 +2967,6 @@
         errorDiv.style.display = 'none';
         
         try {
-            // تحويل الصورة إلى Base64
             const base64 = await new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onload = (e) => resolve(e.target.result);
@@ -2740,11 +2974,9 @@
                 reader.readAsDataURL(file);
             });
             
-            // حفظ Base64 في الحقل المخفي
             document.getElementById('product-image-base64').value = base64;
             document.getElementById('product-image-url').value = '';
             
-            // عرض معاينة الصورة
             const preview = document.getElementById('preview-img');
             const previewContainer = document.getElementById('image-preview');
             
@@ -2759,7 +2991,6 @@
             errorDiv.style.display = 'block';
         }
         
-        // منع إغلاق النافذة
         event.stopPropagation();
     }
     
@@ -2770,14 +3001,12 @@
         
         if (!file) return;
         
-        // التحقق من نوع الملف
         if (!file.type.startsWith('video/')) {
             errorDiv.textContent = 'الملف يجب أن يكون فيديو (mp4, webm, ogg, etc.)';
             errorDiv.style.display = 'block';
             return;
         }
         
-        // التحقق من حجم الملف (50MB كحد أقصى)
         if (file.size > 50 * 1024 * 1024) {
             errorDiv.textContent = 'حجم الفيديو كبير جداً (الحد الأقصى 50MB)';
             errorDiv.style.display = 'block';
@@ -2787,7 +3016,6 @@
         errorDiv.style.display = 'none';
         
         try {
-            // رفع الفيديو إلى Storage
             const timestamp = Date.now();
             const randomString = Math.random().toString(36).substring(2, 15);
             const fileName = `product_video_${timestamp}_${randomString}.${file.name.split('.').pop()}`;
@@ -2795,14 +3023,11 @@
             const storageReference = storageRef(firebaseStorage, `products/videos/${fileName}`);
             await uploadBytes(storageReference, file);
             
-            // الحصول على رابط التنزيل
             const downloadURL = await getDownloadURL(storageReference);
             
-            // حفظ الرابط فقط (لا نحتاج Base64 للفيديو)
             document.getElementById('product-video-url').value = downloadURL;
             document.getElementById('product-video-base64').value = '';
             
-            // عرض معاينة الفيديو
             const preview = document.getElementById('video-preview');
             const previewContainer = document.getElementById('video-preview-container');
             const videoStatus = document.getElementById('video-status');
@@ -2824,7 +3049,6 @@
             errorDiv.style.display = 'block';
         }
         
-        // منع إغلاق النافذة
         event.stopPropagation();
     }
     
@@ -2841,14 +3065,20 @@
     function removeVideo() {
         document.getElementById('product-video-base64').value = '';
         document.getElementById('product-video-url').value = '';
+        document.getElementById('product-youtube-url').value = '';
         document.getElementById('video-preview').src = '';
         document.getElementById('video-preview-container').style.display = 'none';
         document.getElementById('video-upload').value = '';
+        document.getElementById('youtube-preview-container').style.display = 'none';
+        document.getElementById('selected-youtube-thumbnail').value = '';
+        document.getElementById('product-video-thumbnail').value = '';
         
-        // تحديث حالة الفيديو
         document.getElementById('video-status').textContent = 'لم يتم اختيار فيديو';
         document.getElementById('video-status').style.color = '';
         document.getElementById('video-source').textContent = '-';
+        
+        youtubeVideoId = '';
+        currentVideoSource = 'device';
     }
     
     // ====== تحديث جدول المنتجات ======
@@ -2890,7 +3120,6 @@
         filteredProducts.forEach(product => {
             const row = document.createElement('tr');
             
-            // عرض الصورة من Base64 أو URL
             let imageSrc = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgICA8cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iNjAiIGZpbGw9IiMzMzMiLz4KICAgIDx0ZXh0IHg9IjQwIiB5PSIzMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgdGV4dC1kb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5ObyBJbWFnZTwvdGV4dD4KPC9zdmc+';
             if (product.imageBase64) {
                 imageSrc = product.imageBase64;
@@ -2898,7 +3127,6 @@
                 imageSrc = product.imageUrl;
             }
             
-            // حساب عدد الملفات
             const fileCount = product.files ? product.files.length : 0;
             
             row.innerHTML = `
@@ -2969,7 +3197,6 @@
         document.getElementById('videos-count').textContent = videos;
         document.getElementById('active-products').textContent = allProducts.length;
         
-        // حساب عدد الملفات
         const totalFiles = allProducts.reduce((sum, product) => {
             return sum + (product.files ? product.files.length : 0);
         }, 0);
@@ -2986,28 +3213,29 @@
         document.getElementById('chapters-list').innerHTML = '';
         document.getElementById('image-preview').style.display = 'none';
         document.getElementById('video-preview-container').style.display = 'none';
+        document.getElementById('youtube-preview-container').style.display = 'none';
         
-        chapters.length = 0; // مسح الفصول
-        addChapter(); // إضافة فصل افتراضي
+        chapters.length = 0;
+        addChapter();
         
-        // إعادة تعيين حقول الفيديو
-        const videoFields = ['product-video-url', 'product-video-base64'];
+        const videoFields = ['product-video-url', 'product-video-base64', 'product-youtube-url', 'selected-youtube-thumbnail', 'product-video-thumbnail'];
         videoFields.forEach(id => {
             const field = document.getElementById(id);
             if (field) field.value = '';
         });
         
-        // تحديث حالة الفيديو
         document.getElementById('video-status').textContent = 'لم يتم اختيار فيديو';
         document.getElementById('video-status').style.color = '';
         document.getElementById('video-source').textContent = '-';
         
-        // إعادة تعيين الملفات
         uploadedFiles = [];
         renderUploadedFiles();
         document.getElementById('files-section').style.display = 'block';
         document.getElementById('preview-container').style.display = 'none';
         document.getElementById('upload-progress').style.display = 'none';
+        
+        currentVideoSource = 'device';
+        switchVideoSource('device');
         
         document.getElementById('product-modal').style.display = 'flex';
     }
@@ -3024,7 +3252,6 @@
             editingProductId = productId;
             document.getElementById('modal-title').textContent = 'تعديل المنتج';
             
-            // تعبئة النموذج ببيانات المنتج
             document.getElementById('product-title').value = product.title || '';
             document.getElementById('product-title-en').value = product.titleEn || '';
             document.getElementById('product-category').value = product.category || '';
@@ -3036,11 +3263,9 @@
             document.getElementById('product-description').value = product.description || '';
             document.getElementById('product-description-en').value = product.descriptionEn || '';
             
-            // تحديث الفئات الفرعية
             onCategoryChange();
             document.getElementById('product-subcategory').value = product.subcategory || '';
             
-            // عرض الصورة إذا كانت موجودة
             if (product.imageBase64) {
                 document.getElementById('product-image-base64').value = product.imageBase64;
                 document.getElementById('preview-img').src = product.imageBase64;
@@ -3052,37 +3277,54 @@
                 document.getElementById('image-preview').style.display = 'flex';
             }
             
-            // عرض الفيديو إذا كان موجوداً
-            if (product.videoUrl) {
-                document.getElementById('product-video-url').value = product.videoUrl;
-                document.getElementById('product-video-base64').value = product.videoBase64 || '';
-                document.getElementById('video-preview').src = product.videoUrl || (product.videoBase64 || '');
-                document.getElementById('video-preview-container').style.display = 'flex';
-                
-                // تحديث حالة الفيديو
-                document.getElementById('video-status').textContent = 'تم اختيار الفيديو';
-                document.getElementById('video-status').style.color = 'var(--success-color)';
-                document.getElementById('video-source').textContent = product.videoUrl ? 'رابط خارجي' : 'مخزن محلي';
-            }
-            
-            // تحميل الملفات
-            if (product.files && Array.isArray(product.files)) {
-                uploadedFiles = product.files;
-            } else {
-                uploadedFiles = [];
-            }
-            renderUploadedFiles();
-            
-            // إظهار قسم الملفات
-            document.getElementById('files-section').style.display = 'block';
-            
-            // عرض/إخفاء قسم الفصول والفيديو
             const chaptersSection = document.getElementById('chapters-section');
             const videoSection = document.getElementById('video-section');
             
             if (product.category === 'فيديوهات') {
                 videoSection.style.display = 'block';
                 chaptersSection.style.display = 'block';
+                
+                if (product.youtubeUrl) {
+                    switchVideoSource('youtube');
+                    document.getElementById('product-youtube-url').value = product.youtubeUrl;
+                    if (product.videoThumbnail) {
+                        document.getElementById('youtube-thumbnail').src = product.videoThumbnail;
+                        document.getElementById('selected-youtube-thumbnail').value = product.videoThumbnail;
+                        document.getElementById('product-video-thumbnail').value = product.videoThumbnail;
+                        document.getElementById('video-preview').src = product.videoThumbnail;
+                    } else {
+                        const videoId = extractYoutubeVideoId(product.youtubeUrl);
+                        if (videoId) {
+                            const thumbnailUrl = getYoutubeThumbnailUrl(videoId);
+                            document.getElementById('youtube-thumbnail').src = thumbnailUrl;
+                            document.getElementById('video-preview').src = thumbnailUrl;
+                        }
+                    }
+                    document.getElementById('youtube-preview-container').style.display = 'flex';
+                    document.getElementById('video-preview-container').style.display = 'flex';
+                    document.getElementById('video-status').textContent = 'تم إضافة رابط يوتيوب';
+                    document.getElementById('video-status').style.color = 'var(--success-color)';
+                    document.getElementById('video-source').textContent = 'يوتيوب';
+                } else if (product.videoUrl) {
+                    if (product.videoSource === 'gallery') {
+                        switchVideoSource('gallery');
+                        document.getElementById('product-video-url').value = product.videoUrl;
+                        document.getElementById('video-preview').src = product.videoUrl;
+                        document.getElementById('video-preview-container').style.display = 'flex';
+                        document.getElementById('video-status').textContent = 'تم اختيار الفيديو';
+                        document.getElementById('video-status').style.color = 'var(--success-color)';
+                        document.getElementById('video-source').textContent = 'معرض الفيديوهات';
+                    } else {
+                        switchVideoSource('device');
+                        document.getElementById('product-video-url').value = product.videoUrl;
+                        document.getElementById('video-preview').src = product.videoUrl;
+                        document.getElementById('video-preview-container').style.display = 'flex';
+                        document.getElementById('video-status').textContent = 'تم رفع الفيديو';
+                        document.getElementById('video-status').style.color = 'var(--success-color)';
+                        document.getElementById('video-source').textContent = 'الجهاز المحلي';
+                    }
+                }
+                
                 if (product.chapters && Array.isArray(product.chapters)) {
                     chapters.length = 0;
                     product.chapters.forEach(chapter => chapters.push(chapter));
@@ -3093,6 +3335,14 @@
                 chaptersSection.style.display = 'none';
             }
             
+            if (product.files && Array.isArray(product.files)) {
+                uploadedFiles = product.files;
+            } else {
+                uploadedFiles = [];
+            }
+            renderUploadedFiles();
+            
+            document.getElementById('files-section').style.display = 'block';
             document.getElementById('product-modal').style.display = 'flex';
             
         } catch (error) {
@@ -3184,7 +3434,7 @@
         });
     }
     
-    // ====== حفظ المنتج مع تصحيح الأخطاء ======
+    // ====== حفظ المنتج ======
     async function saveProduct(event) {
         event.preventDefault();
         
@@ -3194,9 +3444,6 @@
         saveBtn.disabled = true;
         
         try {
-            console.log("بدء حفظ المنتج...");
-            
-            // 1. التحقق من الحقول المطلوبة
             const requiredFields = [
                 { id: 'product-title', name: 'اسم المنتج (عربي)' },
                 { id: 'product-title-en', name: 'اسم المنتج (إنجليزي)' },
@@ -3216,7 +3463,6 @@
                 }
             }
             
-            // 2. جمع بيانات المنتج
             const productData = {
                 title: document.getElementById('product-title').value.trim(),
                 titleEn: document.getElementById('product-title-en').value.trim(),
@@ -3232,61 +3478,67 @@
                 updatedAt: new Date().toISOString()
             };
             
-            // 3. التحقق من السعر
-            const priceInput = document.getElementById('product-price');
-            const priceValue = parseFloat(priceInput.value);
+            const priceValue = parseFloat(document.getElementById('product-price').value);
             if (isNaN(priceValue) || priceValue < 0) {
                 throw new Error('السعر يجب أن يكون رقم صحيح أو عشري موجب');
             }
             productData.price = `$${priceValue.toFixed(2)}`;
             
-            // 4. التحقق من التقييم
             if (productData.rating < 1 || productData.rating > 5) {
                 throw new Error('التقييم يجب أن يكون بين 1 و 5');
             }
             
-            console.log("بيانات المنتج الأساسية:", productData);
-            
-            // 5. إضافة بيانات الصورة
             const imageBase64 = document.getElementById('product-image-base64').value;
             const imageUrl = document.getElementById('product-image-url').value;
             
             if (imageBase64) {
                 productData.imageBase64 = imageBase64;
-                productData.imageUrl = imageUrl || '';
-                console.log("تمت إضافة صورة Base64");
+                productData.imageUrl = '';
             } else if (imageUrl) {
                 productData.imageUrl = imageUrl;
                 productData.imageBase64 = '';
-                console.log("تمت إضافة رابط الصورة:", imageUrl);
             } else {
-                // استخدام صورة افتراضية
                 productData.imageBase64 = '';
                 productData.imageUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjMzMzIi8+CiAgICA8dGV4dCB4PSIyMDAiIHk9IjE1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgdGV4dC1kb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5ObyBJbWFnZTwvdGV4dD4KPC9zdmc+';
             }
             
-            // 6. إضافة بيانات الفيديو إذا كانت الفئة فيديوهات
             if (productData.category === 'فيديوهات') {
-                const videoUrl = document.getElementById('product-video-url').value;
-                const videoBase64 = document.getElementById('product-video-base64').value;
-                
-                if (videoUrl) {
-                    productData.videoUrl = videoUrl;
-                    console.log("تمت إضافة رابط الفيديو:", videoUrl);
+                if (currentVideoSource === 'youtube') {
+                    const youtubeUrl = document.getElementById('product-youtube-url').value;
+                    const videoThumbnail = document.getElementById('product-video-thumbnail').value;
+                    if (youtubeUrl) {
+                        productData.youtubeUrl = youtubeUrl;
+                        productData.videoUrl = youtubeUrl;
+                        productData.videoSource = 'youtube';
+                        if (videoThumbnail) {
+                            productData.videoThumbnail = videoThumbnail;
+                        }
+                    } else {
+                        throw new Error('الرجاء إضافة رابط يوتيوب');
+                    }
+                } else if (currentVideoSource === 'device') {
+                    const videoUrlField = document.getElementById('product-video-url').value;
+                    if (videoUrlField) {
+                        productData.videoUrl = videoUrlField;
+                        productData.videoSource = 'device';
+                    } else {
+                        throw new Error('الرجاء رفع فيديو من الجهاز');
+                    }
+                } else if (currentVideoSource === 'gallery') {
+                    const videoUrlField = document.getElementById('product-video-url').value;
+                    if (videoUrlField) {
+                        productData.videoUrl = videoUrlField;
+                        productData.videoSource = 'gallery';
+                    } else {
+                        throw new Error('الرجاء اختيار فيديو من المعرض');
+                    }
                 }
-                if (videoBase64) {
-                    productData.videoBase64 = videoBase64;
-                    console.log("تمت إضافة فيديو Base64");
-                }
                 
-                // إضافة الفصول
                 productData.chapters = chapters.filter(ch => ch.title && ch.duration);
-                console.log("عدد الفصول:", productData.chapters.length);
             } else {
                 productData.chapters = [];
             }
             
-            // 7. إضافة بيانات الملفات
             if (uploadedFiles.length > 0) {
                 productData.files = uploadedFiles.map(file => ({
                     name: file.name,
@@ -3296,28 +3548,22 @@
                     contentType: file.contentType || 'application/octet-stream',
                     isExternal: file.isExternal || false
                 }));
-                console.log(`تم إضافة ${uploadedFiles.length} ملف(ات) للمنتج`);
             } else {
                 productData.files = [];
             }
             
-            // 8. التحقق من اتصال Firebase
             if (!firebaseDatabase) {
                 throw new Error('لا يوجد اتصال بقاعدة البيانات');
             }
             
-            // 9. حفظ المنتج في Firebase
             let productRef;
             if (editingProductId) {
                 productRef = ref(firebaseDatabase, `products/${editingProductId}`);
-                console.log("تحديث منتج موجود:", editingProductId);
             } else {
                 productRef = push(ref(firebaseDatabase, 'products'));
-                console.log("إضافة منتج جديد");
             }
             
             await set(productRef, productData);
-            console.log("تم حفظ المنتج بنجاح في Firebase");
             
             showNotification(
                 editingProductId ? 'تم تحديث المنتج بنجاح' : 'تم إضافة المنتج بنجاح',
@@ -3330,7 +3576,6 @@
         } catch (error) {
             console.error("Error saving product:", error);
             
-            // عرض رسالة الخطأ المناسبة
             let errorMessage = 'خطأ في حفظ المنتج';
             if (error.message.includes('Firebase')) {
                 errorMessage = 'خطأ في الاتصال بقاعدة البيانات';
@@ -3340,6 +3585,10 @@
                 errorMessage = 'السعر غير صحيح';
             } else if (error.message.includes('التقييم')) {
                 errorMessage = 'التقييم يجب أن يكون بين 1 و 5';
+            } else if (error.message.includes('يوتيوب')) {
+                errorMessage = error.message;
+            } else if (error.message.includes('فيديو')) {
+                errorMessage = error.message;
             }
             
             showNotification(errorMessage, 'error');
@@ -3407,7 +3656,6 @@
             });
         }
         
-        // إظهار/إخفاء قسم الفيديو والفصول
         const chaptersSection = document.getElementById('chapters-section');
         const videoSection = document.getElementById('video-section');
         
@@ -3443,6 +3691,7 @@
         document.getElementById('preview-container').style.display = 'none';
         removeImage();
         removeVideo();
+        pendingThumbnailSelection = false;
     }
     
     // ====== العودة للوحة التحكم ======
@@ -3538,7 +3787,6 @@
         
         await loadProducts();
         
-        // إضافة أنماط CSS للرسوم المتحركة
         const style = document.createElement('style');
         style.textContent = `
             @keyframes slideIn {
@@ -3566,21 +3814,116 @@
             @keyframes spin {
                 to { transform: rotate(360deg); }
             }
+            
+            .video-source-tabs {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 20px;
+                flex-wrap: wrap;
+            }
+            
+            .video-source-btn {
+                background: var(--darker-bg);
+                border: 1px solid var(--border-color);
+                padding: 10px 20px;
+                border-radius: var(--border-radius-md);
+                cursor: pointer;
+                transition: var(--transition);
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            
+            .video-source-btn.active {
+                background: var(--gradient-primary);
+                border-color: var(--accent-color);
+                color: white;
+            }
+            
+            .thumbnail-upload-area {
+                border: 2px dashed var(--border-color);
+                border-radius: var(--border-radius-md);
+                padding: 20px;
+                text-align: center;
+            }
+            
+            .thumbnail-preview {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .thumbnail-img {
+                max-width: 200px;
+                max-height: 150px;
+                border-radius: var(--border-radius-sm);
+                object-fit: cover;
+            }
+            
+            .thumbnail-actions {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .video-preview-box {
+                position: relative;
+                border-radius: var(--border-radius-md);
+                overflow: hidden;
+            }
+            
+            .video-preview-img {
+                width: 100%;
+                max-height: 200px;
+                object-fit: cover;
+            }
+            
+            .video-preview-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                color: white;
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+            
+            .video-preview-box:hover .video-preview-overlay {
+                opacity: 1;
+            }
+            
+            .video-preview-overlay i {
+                font-size: 48px;
+            }
+            
+            .video-info {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 10px;
+                font-size: 14px;
+                color: var(--text-muted);
+            }
         `;
         document.head.appendChild(style);
         
-        // إضافة حدث البحث عند الضغط على Enter
         document.getElementById('search-input')?.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') searchProducts();
         });
         
-        // إضافة أحداث لمنع إغلاق النوافذ
         setupModalPreventions();
     }
     
     // ====== إعداد منع إغلاق النوافذ ======
     function setupModalPreventions() {
-        // لمنع إغلاق نافذة المنتج عند النقر على المحتوى
         const productModalContent = document.querySelector('#product-modal .modal-content');
         if (productModalContent) {
             productModalContent.addEventListener('click', function(e) {
@@ -3588,7 +3931,6 @@
             });
         }
         
-        // لمنع إغلاق نافذة المعرض عند النقر على المحتوى
         const galleryModalContent = document.querySelector('#gallery-modal .modal-content');
         if (galleryModalContent) {
             galleryModalContent.addEventListener('click', function(e) {
@@ -3596,7 +3938,6 @@
             });
         }
         
-        // لمنع إغلاق نافذة مدير الملفات عند النقر على المحتوى
         const fileManagerModalContent = document.querySelector('#file-manager-modal .modal-content');
         if (fileManagerModalContent) {
             fileManagerModalContent.addEventListener('click', function(e) {
@@ -3604,7 +3945,6 @@
             });
         }
         
-        // لمنع إغلاق النوافذ عند رفع الملفات
         const fileInputs = document.querySelectorAll('input[type="file"]');
         fileInputs.forEach(input => {
             input.addEventListener('click', function(e) {
@@ -3653,11 +3993,14 @@
     window.uploadToFileManager = uploadToFileManager;
     window.removeFile = removeFile;
     window.previewFile = previewFile;
+    window.switchVideoSource = switchVideoSource;
+    window.handleYoutubeUrl = handleYoutubeUrl;
+    window.uploadThumbnailForYoutube = uploadThumbnailForYoutube;
+    window.removeYoutubeThumbnail = removeYoutubeThumbnail;
+    window.openThumbnailGallery = openThumbnailGallery;
     
-    // تشغيل تهيئة الصفحة
     document.addEventListener('DOMContentLoaded', initializePage);
     
-    // إغلاق المودال عند الضغط على ESC
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             if (document.getElementById('product-modal').style.display === 'flex') {
@@ -3672,7 +4015,6 @@
         }
     });
     
-    // إغلاق المودال عند النقر خارج المحتوى
     document.getElementById('product-modal')?.addEventListener('click', function(e) {
         if (e.target === this) closeModal();
     });

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة المتقدمين - إدارة التوظيف</title>
+    <link rel="icon" type="image/x-icon" href="img/icon1.jpg">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0a0a14;
+            --surface: rgba(20,20,40,0.7);
+            --border: rgba(255,255,255,0.08);
+            --text: #e8e8f0;
+            --muted: #8888aa;
+            --purple: #a29bfe;
+            --cyan: #81ecec;
+            --gold: #ffeaa7;
+            --green: #00b894;
+            --red: #e17055;
+            --grad1: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            --radius: 20px;
+            --transition: 0.35s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(150deg, #0a0a1a 0%, #12122a 30%, #0d0d24 60%, #0a0a1a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        .bg-animation { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+        .bg-orb { position: absolute; border-radius: 50%; filter: blur(140px); animation: orbFloat 18s infinite alternate; }
+        .bg-orb:nth-child(1) { width: 450px; height: 450px; background: rgba(108,92,231,0.15); top: -150px; right: -100px; }
+        .bg-orb:nth-child(2) { width: 400px; height: 400px; background: rgba(0,206,201,0.12); bottom: -120px; left: -80px; animation-delay: -9s; }
+        @keyframes orbFloat {
+            0% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(-50px,30px) scale(1.2); }
+            100% { transform: translate(30px,-30px) scale(0.9); }
+        }
+
+        .topbar {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(15,15,28,0.8); backdrop-filter: blur(30px);
+            border-bottom: 1px solid var(--border); padding: 14px 28px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .topbar h1 { font-size: 1.3em; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .topbar h1 .icon-circle {
+            width: 42px; height: 42px; border-radius: 14px;
+            background: var(--grad1); display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 1em; box-shadow: 0 8px 20px rgba(108,92,231,0.4);
+        }
+        .btn-refresh {
+            padding: 10px 20px; border-radius: 50px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+            color: #fff; cursor: pointer; font-family: 'Cairo', sans-serif;
+            font-weight: 600; font-size: 0.85em; transition: var(--transition);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .btn-refresh:hover { background: rgba(255,255,255,0.1); }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px; padding: 24px; max-width: 1300px; margin: 0 auto;
+            position: relative; z-index: 1;
+        }
+        .stat-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 18px; padding: 20px; text-align: center;
+            transition: var(--transition);
+        }
+        .stat-card .icon-wrap {
+            width: 46px; height: 46px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3em; margin: 0 auto 10px;
+        }
+        .stat-card:nth-child(1) .icon-wrap { background: rgba(162,155,254,0.2); color: var(--purple); }
+        .stat-card:nth-child(2) .icon-wrap { background: rgba(129,236,236,0.2); color: var(--cyan); }
+        .stat-card:nth-child(3) .icon-wrap { background: rgba(255,234,167,0.2); color: var(--gold); }
+        .stat-card:nth-child(4) .icon-wrap { background: rgba(0,184,148,0.2); color: var(--green); }
+        .stat-card .num { font-size: 2.2em; font-weight: 900; color: #fff; }
+        .stat-card .lbl { font-size: 0.8em; color: var(--muted); margin-top: 4px; }
+
+        .container { max-width: 1300px; margin: 0 auto; padding: 0 24px 50px; position: relative; z-index: 1; }
+        .section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+        .section-head .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 12px #00cec9; }
+        .section-head h2 { font-size: 1.3em; font-weight: 700; }
+
+        .apps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 14px; }
+        .app-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 20px;
+            transition: var(--transition); position: relative; overflow: hidden;
+            animation: fadeIn 0.4s both;
+        }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }
+        .app-card::before {
+            content: ''; position: absolute; top: 0; right: 0;
+            width: 4px; height: 100%; border-radius: 0 3px 3px 0;
+        }
+        .app-card.s-new::before { background: var(--cyan); }
+        .app-card.s-reviewing::before { background: var(--gold); }
+        .app-card.s-accepted::before { background: var(--green); }
+        .app-card.s-rejected::before { background: var(--red); }
+        .app-card:hover { border-color: rgba(255,255,255,0.15); }
+
+        .app-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .app-email { font-weight: 700; color: #fff; display: flex; align-items: center; gap: 7px; font-size: 0.95em; }
+        .app-email i { color: var(--purple); }
+        .badge { padding: 5px 12px; border-radius: 15px; font-size: 0.7em; font-weight: 700; }
+        .badge-new { background: rgba(0,206,201,0.15); color: var(--cyan); }
+        .badge-reviewing { background: rgba(253,203,110,0.15); color: var(--gold); }
+        .badge-accepted { background: rgba(0,184,148,0.15); color: var(--green); }
+        .badge-rejected { background: rgba(225,112,85,0.15); color: var(--red); }
+
+        .chips-row { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0; }
+        .chip {
+            padding: 4px 12px; border-radius: 12px; font-size: 0.72em; font-weight: 500;
+            background: rgba(108,92,231,0.1); color: var(--purple);
+            border: 1px solid rgba(108,92,231,0.2);
+        }
+        .app-meta { font-size: 0.76em; color: var(--muted); margin: 6px 0; display: flex; align-items: center; gap: 5px; }
+
+        .actions { display: flex; gap: 7px; margin-top: 12px; flex-wrap: wrap; }
+        .btn {
+            padding: 7px 14px; border-radius: 18px; border: none; cursor: pointer;
+            font-family: 'Cairo', sans-serif; font-weight: 600; font-size: 0.74em;
+            transition: var(--transition); display: flex; align-items: center; gap: 4px;
+        }
+        .btn-review { background: rgba(253,203,110,0.2); color: var(--gold); border: 1px solid rgba(253,203,110,0.3); }
+        .btn-accept { background: rgba(0,184,148,0.2); color: var(--green); border: 1px solid rgba(0,184,148,0.3); }
+        .btn-reject { background: rgba(225,112,85,0.2); color: var(--red); border: 1px solid rgba(225,112,85,0.3); }
+        .btn-message { background: rgba(108,92,231,0.2); color: var(--purple); border: 1px solid rgba(108,92,231,0.3); }
+        .btn-delete { background: transparent; color: var(--muted); border: 1px solid #333; }
+        .btn:hover { filter: brightness(1.3); }
+
+        /* Message Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        .modal-overlay.show { display: flex; }
+        .modal-box {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 30px;
+            width: 90%;
+            max-width: 550px;
+            text-align: center;
+        }
+        .modal-box h3 { font-size: 1.3em; margin-bottom: 8px; color: #fff; }
+        .modal-box .sub { color: var(--muted); margin-bottom: 18px; font-size: 0.85em; }
+        .modal-box textarea {
+            width: 100%;
+            min-height: 120px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.9em;
+            resize: vertical;
+        }
+        .modal-box textarea:focus { outline: none; border-color: #6c5ce7; }
+        .modal-actions { display: flex; gap: 10px; margin-top: 16px; justify-content: center; }
+        .btn-send {
+            background: var(--grad1);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+        }
+        .btn-close-modal {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+        }
+
+        .toast {
+            position: fixed; top: 25px; left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            padding: 12px 26px; border-radius: 50px; font-weight: 700;
+            z-index: 300; transition: var(--transition); font-size: 0.85em;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.success { background: #00b894; color: #fff; }
+        .toast.error { background: #e17055; color: #fff; }
+
+        .existing-message {
+            background: rgba(108,92,231,0.1);
+            border: 1px solid rgba(108,92,231,0.2);
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 0.8em;
+            color: var(--muted);
+        }
+        .existing-message strong { color: var(--purple); }
+
+        @media (max-width: 768px) {
+            .apps-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animation">
+        <div class="bg-orb"></div>
+        <div class="bg-orb"></div>
+    </div>
+
+    <div class="topbar">
+        <h1>
+            <div class="icon-circle"><i class="fa-solid fa-users-gear"></i></div>
+            <span>لوحة إدارة المتقدمين</span>
+        </h1>
+        <button class="btn-refresh" onclick="refreshData()">
+            <i class="fa-solid fa-rotate"></i> تحديث البيانات
+        </button>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card"><div class="icon-wrap"><i class="fa-solid fa-users"></i></div><div class="num" id="tTotal">0</div><div class="lbl">إجمالي المتقدمين</div></div>
+        <div class="stat-card"><div class="icon-wrap"><i class="fa-solid fa-circle"></i></div><div class="num" id="tNew">0</div><div class="lbl">جديد</div></div>
+        <div class="stat-card"><div class="icon-wrap"><i class="fa-solid fa-magnifying-glass"></i></div><div class="num" id="tReview">0</div><div class="lbl">قيد المراجعة</div></div>
+        <div class="stat-card"><div class="icon-wrap"><i class="fa-solid fa-circle-check"></i></div><div class="num" id="tAccept">0</div><div class="lbl">مقبول</div></div>
+    </div>
+
+    <div class="container">
+        <div class="section-head"><div class="dot"></div><h2>قائمة المتقدمين</h2></div>
+        <div class="apps-grid" id="appsGrid">
+            <div style="text-align:center;padding:60px;grid-column:1/-1;">
+                <div style="font-size:3em;margin-bottom:15px;">⏳</div>
+                <p style="color:var(--muted);">جارٍ تحميل البيانات...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Modal -->
+    <div class="modal-overlay" id="messageModal">
+        <div class="modal-box">
+            <h3><i class="fa-solid fa-envelope"></i> إرسال رسالة للمستخدم</h3>
+            <p class="sub" id="modalUserInfo">إلى: -</p>
+            <textarea id="messageText" placeholder="اكتب رسالتك للمستخدم هنا..."></textarea>
+            <div class="existing-message" id="existingMessage" style="display:none;">
+                <strong>الرسالة الحالية:</strong>
+                <div id="existingMessageText"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-close-modal" onclick="closeModal()">إلغاء</button>
+                <button class="btn-send" onclick="sendMessage()">
+                    <i class="fa-solid fa-paper-plane"></i> إرسال الرسالة
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+        import { getDatabase, ref, get, update, remove } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBlcKC2ncX9mTOPlhDOnfmyzdJ5mLinWYY",
+            authDomain: "al-fajr-digital-library.firebaseapp.com",
+            databaseURL: "https://al-fajr-digital-library-default-rtdb.firebaseio.com",
+            projectId: "al-fajr-digital-library",
+            storageBucket: "al-fajr-digital-library.firebasestorage.app",
+            messagingSenderId: "739899495618",
+            appId: "1:739899495618:web:8e60409193ec1408b4d75b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        window.db = db;
+        window.fbRef = ref;
+        window.fbGet = get;
+        window.fbUpdate = update;
+        window.fbRemove = remove;
+
+        let currentMessageAppId = null;
+        let currentMessageApp = null;
+
+        async function loadData() {
+            const grid = document.getElementById('appsGrid');
+            
+            try {
+                const snapshot = await get(ref(db, 'jobApplications'));
+                const apps = [];
+                
+                if (snapshot.exists()) {
+                    snapshot.forEach(child => {
+                        apps.push({ id: child.key, ...child.val() });
+                    });
+                }
+                
+                apps.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                console.log('📊 تم جلب', apps.length, 'طلب');
+
+                if (apps.length === 0) {
+                    grid.innerHTML = `
+                        <div style="text-align:center;padding:60px;grid-column:1/-1;">
+                            <div style="font-size:4em;opacity:0.2;margin-bottom:15px;">📭</div>
+                            <h3 style="color:#fff;">لا يوجد متقدمون بعد</h3>
+                            <p style="color:var(--muted);">سيظهر المتقدمون هنا تلقائياً</p>
+                        </div>`;
+                    updateStats(0,0,0,0);
+                } else {
+                    renderApps(apps);
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                grid.innerHTML = `
+                    <div style="text-align:center;padding:60px;grid-column:1/-1;">
+                        <h3 style="color:#e17055;">خطأ في الاتصال</h3>
+                        <p style="color:var(--muted);">${err.message}</p>
+                    </div>`;
+            }
+        }
+
+        function renderApps(apps) {
+            const grid = document.getElementById('appsGrid');
+            let t = 0, n = 0, r = 0, a = 0;
+            
+            grid.innerHTML = apps.map((app, i) => {
+                const s = app.status || 'new';
+                if (s === 'new') n++;
+                else if (s === 'reviewing') r++;
+                else if (s === 'accepted') a++;
+                t++;
+                
+                const badges = { new:'badge-new', reviewing:'badge-reviewing', accepted:'badge-accepted', rejected:'badge-rejected' };
+                const labels = { new:'جديد', reviewing:'قيد المراجعة', accepted:'مقبول', rejected:'مرفوض' };
+                const dateStr = app.timestamp ? new Date(app.timestamp).toLocaleDateString('ar-SA', {
+                    year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'
+                }) : 'غير معروف';
+                
+                const hasMessage = app.adminMessage ? true : false;
+                
+                return `
+                <div class="app-card s-${s}" style="animation-delay:${i*0.04}s">
+                    <div class="app-header">
+                        <div class="app-email">
+                            <i class="fa-solid fa-envelope"></i> ${app.userEmail||'غير معروف'}
+                            ${app.userName ? ' · ' + app.userName : ''}
+                        </div>
+                        <span class="badge ${badges[s]}">${labels[s]}</span>
+                    </div>
+                    <div class="chips-row">${(app.jobs||[]).map(j=>`<span class="chip"><i class="fa-solid fa-briefcase"></i> ${j.title}</span>`).join('')}</div>
+                    <div class="app-meta">
+                        <i class="fa-regular fa-clock"></i> ${dateStr} · 
+                        <i class="fa-solid fa-hashtag"></i> ${app.jobCount||0} وظيفة
+                        ${hasMessage ? ' · <i class="fa-solid fa-envelope" style="color:#a29bfe;"></i> لديها رسالة' : ''}
+                    </div>
+                    ${hasMessage ? `
+                    <div class="existing-message">
+                        <strong>الرسالة للمستخدم:</strong> ${app.adminMessage.substring(0, 80)}...
+                    </div>` : ''}
+                    <div class="actions">
+                        <button class="btn btn-review" onclick="window.updStatus('${app.id}','reviewing')">
+                            <i class="fa-solid fa-magnifying-glass"></i> مراجعة
+                        </button>
+                        <button class="btn btn-accept" onclick="window.updStatus('${app.id}','accepted')">
+                            <i class="fa-solid fa-check"></i> قبول
+                        </button>
+                        <button class="btn btn-reject" onclick="window.updStatus('${app.id}','rejected')">
+                            <i class="fa-solid fa-xmark"></i> رفض
+                        </button>
+                        <button class="btn btn-message" onclick="window.openMessageModal('${app.id}')">
+                            <i class="fa-solid fa-envelope"></i> رسالة
+                        </button>
+                        <button class="btn btn-delete" onclick="window.delApp('${app.id}')">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>`;
+            }).join('');
+            
+            updateStats(t, n, r, a);
+        }
+
+        function updateStats(t, n, r, a) {
+            document.getElementById('tTotal').textContent = t;
+            document.getElementById('tNew').textContent = n;
+            document.getElementById('tReview').textContent = r;
+            document.getElementById('tAccept').textContent = a;
+        }
+
+        window.updStatus = async function(id, status) {
+            try {
+                await update(ref(db, 'jobApplications/' + id), { status });
+                showToast('✅ تم تحديث الحالة');
+                loadData();
+            } catch(e) {
+                showToast('❌ خطأ: ' + e.message, true);
+            }
+        };
+
+        window.delApp = async function(id) {
+            if (confirm('حذف هذا الطلب نهائياً؟')) {
+                try {
+                    await remove(ref(db, 'jobApplications/' + id));
+                    showToast('✅ تم الحذف');
+                    loadData();
+                } catch(e) {
+                    showToast('❌ خطأ: ' + e.message, true);
+                }
+            }
+        };
+
+        window.openMessageModal = async function(appId) {
+            try {
+                const snap = await get(ref(db, 'jobApplications/' + appId));
+                if (snap.exists()) {
+                    const app = snap.val();
+                    currentMessageAppId = appId;
+                    currentMessageApp = app;
+                    
+                    document.getElementById('modalUserInfo').textContent = 
+                        `إلى: ${app.userName || ''} (${app.userEmail || ''})`;
+                    
+                    if (app.adminMessage) {
+                        document.getElementById('existingMessage').style.display = 'block';
+                        document.getElementById('existingMessageText').textContent = app.adminMessage;
+                        document.getElementById('messageText').value = app.adminMessage;
+                    } else {
+                        document.getElementById('existingMessage').style.display = 'none';
+                        document.getElementById('messageText').value = '';
+                    }
+                    
+                    document.getElementById('messageModal').classList.add('show');
+                }
+            } catch(e) {
+                showToast('❌ خطأ: ' + e.message, true);
+            }
+        };
+
+        window.sendMessage = async function() {
+            const message = document.getElementById('messageText').value.trim();
+            if (!message) {
+                showToast('اكتب رسالة أولاً', true);
+                return;
+            }
+            if (!currentMessageAppId) return;
+
+            try {
+                await update(ref(db, 'jobApplications/' + currentMessageAppId), {
+                    adminMessage: message,
+                    adminName: 'فريق التوظيف',
+                    messageTimestamp: new Date().toISOString()
+                });
+                showToast('✅ تم إرسال الرسالة');
+                closeModal();
+                loadData();
+            } catch(e) {
+                showToast('❌ خطأ: ' + e.message, true);
+            }
+        };
+
+        window.closeModal = function() {
+            document.getElementById('messageModal').classList.remove('show');
+            currentMessageAppId = null;
+            currentMessageApp = null;
+        };
+
+        function showToast(msg, err = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.className = `toast ${err ? 'error' : 'success'} show`;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        window.refreshData = function() {
+            loadData();
+        };
+
+        // Load data on start
+        loadData();
+        console.log('✅ لوحة التحكم جاهزة');
+    </script>
+</body>
+</html>

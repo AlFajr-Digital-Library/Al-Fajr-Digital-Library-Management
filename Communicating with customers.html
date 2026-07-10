@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>لوحة المشرفين | مكتبة الفجر الرقمية</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --accent: #ff6b35;
+            --accent-light: #ff8e53;
+            --bg: #f5f7fa;
+            --surface: #fff;
+            --text: #1a1a2e;
+            --text-light: #64748b;
+            --border: #e8ecf1;
+            --success: #10b981;
+            --danger: #ef4444;
+            --sidebar-w: 380px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #f5f7fa;
+            height: 100dvh;
+            width: 100dvw;
+            overflow: hidden;
+            position: fixed;
+            inset: 0;
+        }
+
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            background: #f5f7fa;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: all 0.5s ease;
+        }
+
+        .login-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.05);
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 440px;
+            background: #fff;
+            border-radius: 24px;
+            padding: 36px 28px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+        }
+
+        .login-card .logo {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #ff6b35, #ff8e53);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 30px;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(255,107,53,0.3);
+        }
+
+        .login-card h2 {
+            text-align: center;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+        }
+
+        .login-card .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .form-group label i {
+            color: #ff6b35;
+            width: 18px;
+            text-align: center;
+            margin-left: 4px;
+        }
+
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e8ecf1;
+            border-radius: 14px;
+            font-size: 15px;
+            font-family: 'Cairo', sans-serif;
+            background: #f8fafc;
+            transition: 0.2s;
+        }
+
+        .form-group select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 14px center;
+            cursor: pointer;
+        }
+
+        .form-group select:focus, .form-group input:focus {
+            border-color: #ff6b35;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255,107,53,0.1);
+            background: #fff;
+        }
+
+        .pin-grid {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            direction: ltr;
+        }
+
+        .pin-grid input {
+            width: 56px;
+            height: 62px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            border-radius: 14px;
+            border: 2px solid #e8ecf1;
+            background: #f8fafc;
+            font-family: 'Cairo', sans-serif;
+            transition: 0.2s;
+        }
+
+        .pin-grid input:focus {
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 3px rgba(255,107,53,0.1);
+            background: #fff;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #ff6b35, #ff8e53);
+            border: none;
+            color: #fff;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 20px;
+            box-shadow: 0 6px 20px rgba(255,107,53,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(255,107,53,0.4);
+        }
+
+        .btn-login:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .toast-msg {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 14px 24px;
+            border-radius: 14px;
+            font-weight: 500;
+            font-size: 14px;
+            z-index: 9999;
+            animation: fadeDown 0.3s ease;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            text-align: center;
+            max-width: 90%;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .toast-msg.error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        .toast-msg.success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateX(-50%) translateY(-16px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+        .shake { animation: shake 0.3s ease; }
+
+        /* Dashboard */
+        .dashboard {
+            display: flex;
+            height: 100%;
+            width: 100%;
+        }
+
+        .sidebar {
+            width: var(--sidebar-w);
+            min-width: var(--sidebar-w);
+            background: #fff;
+            border-left: 1px solid #e8ecf1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            z-index: 20;
+        }
+
+        .sidebar-header {
+            background: #fff;
+            padding: 20px;
+            border-bottom: 1px solid #e8ecf1;
+        }
+
+        .sidebar-header .greeting {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-header .name {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1a1a2e;
+        }
+
+        .sidebar-header .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #ecfdf5;
+            color: #065f46;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-top: 8px;
+            border: 1px solid #a7f3d0;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 8px;
+            padding: 14px 16px;
+            background: #fafbfc;
+            border-bottom: 1px solid #e8ecf1;
+        }
+
+        .stat-card {
+            flex: 1;
+            background: #fff;
+            border-radius: 12px;
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid #e8ecf1;
+        }
+
+        .stat-card .num {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ff6b35;
+            line-height: 1;
+        }
+
+        .stat-card .lbl {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .search-wrap {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e8ecf1;
+            position: relative;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            padding: 10px 14px 10px 36px;
+            border: 2px solid #e8ecf1;
+            border-radius: 12px;
+            font-size: 13px;
+            font-family: 'Cairo', sans-serif;
+            background: #f8fafc;
+            transition: 0.2s;
+        }
+
+        .search-wrap input:focus {
+            border-color: #ff6b35;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255,107,53,0.08);
+        }
+
+        .search-wrap i {
+            position: absolute;
+            right: 26px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .users-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 6px 10px;
+        }
+
+        .users-list::-webkit-scrollbar { width: 4px; }
+        .users-list::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+
+        .user-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .user-card:hover {
+            border-color: rgba(255,107,53,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        }
+
+        .user-card.active {
+            border-color: #ff6b35;
+            background: #fffaf8;
+        }
+
+        .user-card .row-flex {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-card .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ff6b35, #ff8e53);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 15px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .user-card .info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-card .info .uname {
+            font-weight: 600;
+            color: #1a1a2e;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .user-card .info .uemail {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .user-card .info .preview {
+            font-size: 12px;
+            color: #94a3b8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-card .time {
+            font-size: 10px;
+            color: #94a3b8;
+        }
+
+        .unread-badge {
+            background: #ff6b35;
+            color: #fff;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .replied-tag {
+            background: #ecfdf5;
+            color: #065f46;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'Cairo', sans-serif;
+            margin: 8px 10px;
+            width: calc(100% - 20px);
+            transition: 0.2s;
+        }
+
+        .logout-btn:hover { background: #fee2e2; }
+
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #fafbfc;
+        }
+
+        .chat-top {
+            background: #fff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e8ecf1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 60px;
+        }
+
+        .chat-top .avatar-sm {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ff6b35, #ff8e53);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 15px;
+            color: #fff;
+        }
+
+        .chat-top .cname {
+            font-weight: 700;
+            color: #1a1a2e;
+            font-size: 15px;
+        }
+
+        .chat-top .cemail {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .msg-view {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .msg-view::-webkit-scrollbar { width: 4px; }
+        .msg-view::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+
+        .date-div {
+            text-align: center;
+            font-size: 11px;
+            color: #94a3b8;
+            margin: 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .date-div::before, .date-div::after { content: ''; flex: 1; height: 1px; background: #e8ecf1; }
+
+        .m-row {
+            display: flex;
+            flex-direction: column;
+            animation: pop 0.25s ease;
+        }
+        .m-row.in { align-items: flex-start; }
+        .m-row.out { align-items: flex-end; }
+
+        @keyframes pop {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bubble {
+            max-width: 65%;
+            padding: 10px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.6;
+            word-break: break-word;
+        }
+
+        .bubble.in {
+            background: #fff;
+            color: #1a1a2e;
+            border-bottom-left-radius: 4px;
+            border: 1px solid #e8ecf1;
+        }
+
+        .bubble.out {
+            background: linear-gradient(135deg, #ff6b35, #ff8e53);
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bubble .t {
+            font-size: 10px;
+            opacity: 0.7;
+            margin-top: 3px;
+            display: block;
+            text-align: left;
+        }
+
+        .bubble .s {
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 2px;
+            display: block;
+        }
+
+        .bubble .supervisor-tag {
+            font-size: 11px;
+            font-weight: 600;
+            color: #ff6b35;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .input-bar {
+            background: #fff;
+            padding: 10px 16px;
+            border-top: 1px solid #e8ecf1;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .input-bar input {
+            flex: 1;
+            border: 2px solid #e8ecf1;
+            border-radius: 14px;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-family: 'Cairo', sans-serif;
+            outline: none;
+            background: #f8fafc;
+            transition: 0.2s;
+        }
+
+        .input-bar input:focus {
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 3px rgba(255,107,53,0.08);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #ff6b35, #ff8e53);
+            border: none;
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            font-size: 17px;
+            cursor: pointer;
+            transition: 0.2s;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-btn:hover:not(:disabled) { transform: translateY(-1px); }
+        .send-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+
+        .empty-view {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            gap: 8px;
+        }
+        .empty-view .circle {
+            width: 72px;
+            height: 72px;
+            background: #e8ecf1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .mobile-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid #e8ecf1;
+            background: #fff;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #64748b;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            z-index: 15;
+        }
+        .sidebar-overlay.show { display: block; }
+
+        @media (max-width: 800px) {
+            .sidebar {
+                position: fixed;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                z-index: 25;
+                transform: translateX(100%);
+                transition: 0.3s ease;
+                width: 100%;
+                min-width: 100%;
+                max-width: 400px;
+            }
+            .sidebar.open { transform: translateX(0); }
+            .mobile-toggle { display: flex; }
+            .login-card { padding: 28px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-overlay" id="loginOverlay">
+    <div class="login-card" id="loginCard">
+        <div class="logo"><i class="fas fa-shield-halved"></i></div>
+        <h2>لوحة المشرفين</h2>
+        <div class="subtitle">مكتبة الفجر الرقمية</div>
+
+        <div class="form-group">
+            <label><i class="fas fa-user"></i> اسم المستخدم</label>
+            <select id="usernameSelect">
+                <option value="" disabled selected>اختر المشرف...</option>
+                <option value="supervisor_hussain">حسين العصاري</option>
+                <option value="supervisor_ahmed_j">أحمد الجويد</option>
+                <option value="supervisor_hassan">حسن مالك</option>
+                <option value="supervisor_rayan">ريان</option>
+                <option value="supervisor_moayad">مؤيد رضا</option>
+                <option value="supervisor_mohammed_a">محمد علي</option>
+                <option value="supervisor_mohammed_t">محمد طاهر</option>
+                <option value="supervisor_abdulaziz">عبد العزيز</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label><i class="fas fa-lock"></i> كلمة المرور</label>
+            <input type="password" id="passwordInput" placeholder="أدخل كلمة المرور" autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+            <label><i class="fas fa-key"></i> الرمز السري (4 أرقام)</label>
+            <div class="pin-grid" id="pinContainer">
+                <input type="text" maxlength="1" inputmode="numeric" class="pin-input" data-index="0" autocomplete="off" />
+                <input type="text" maxlength="1" inputmode="numeric" class="pin-input" data-index="1" autocomplete="off" />
+                <input type="text" maxlength="1" inputmode="numeric" class="pin-input" data-index="2" autocomplete="off" />
+                <input type="text" maxlength="1" inputmode="numeric" class="pin-input" data-index="3" autocomplete="off" />
+            </div>
+        </div>
+
+        <button id="loginBtn" class="btn-login">
+            <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+        </button>
+    </div>
+</div>
+
+<div class="dashboard" id="dashboard" style="display: none;">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="greeting">لوحة التحكم</div>
+            <div class="name" id="sidebarSupervisorName">المشرف</div>
+            <div class="badge"><span style="width:7px;height:7px;background:#10b981;border-radius:50%;"></span> متصل</div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card"><div class="num" id="totalUsers">0</div><div class="lbl">مستخدم</div></div>
+            <div class="stat-card"><div class="num" id="totalMessages">0</div><div class="lbl">رسالة</div></div>
+            <div class="stat-card"><div class="num" id="unreadCount">0</div><div class="lbl">جديدة</div></div>
+        </div>
+
+        <div class="search-wrap">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="البحث عن مستخدم..." />
+        </div>
+
+        <div class="users-list" id="usersList">
+            <div style="text-align:center;padding:50px;color:#94a3b8;">
+                <i class="fas fa-inbox" style="font-size:40px;display:block;margin-bottom:10px;"></i>
+                <p>بانتظار رسائل المستخدمين...</p>
+            </div>
+        </div>
+
+        <button class="logout-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+        </button>
+    </div>
+
+    <div class="chat-area">
+        <div class="chat-top">
+            <button class="mobile-toggle" id="mobileToggle"><i class="fas fa-users"></i></button>
+            <div class="avatar-sm" id="chatUserAvatar">?</div>
+            <div>
+                <div class="cname" id="chatUserName">اختر محادثة</div>
+                <div class="cemail" id="chatUserEmail"></div>
+            </div>
+        </div>
+
+        <div class="msg-view" id="messagesView">
+            <div class="empty-view">
+                <div class="circle"><i class="fas fa-comments"></i></div>
+                <h4 style="color:#64748b;">مرحباً بك</h4>
+                <p>اختر محادثة من القائمة</p>
+            </div>
+        </div>
+
+        <div class="input-bar">
+            <input type="text" id="chatInput" placeholder="اكتب رسالتك..." disabled />
+            <button class="send-btn" id="chatSendBtn" disabled><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue, set, query, orderByChild, limitToLast, off, get, update } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBlcKC2ncX9mTOPlhDOnfmyzdJ5mLinWYY",
+        authDomain: "al-fajr-digital-library.firebaseapp.com",
+        databaseURL: "https://al-fajr-digital-library-default-rtdb.firebaseio.com",
+        projectId: "al-fajr-digital-library",
+        storageBucket: "al-fajr-digital-library.firebasestorage.app",
+        messagingSenderId: "739899495618",
+        appId: "1:739899495618:web:8e60409193ec1408b4d75b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Supervisor credentials
+    const supervisors = {
+        'supervisor_hussain':     { name: 'حسين العصاري', password: 'hussain2024', pin: '4821' },
+        'supervisor_ahmed_j':    { name: 'أحمد الجويد', password: 'ahmed2024', pin: '7390' },
+        'supervisor_hassan':     { name: 'حسن مالك', password: 'hassan2024', pin: '1056' },
+        'supervisor_rayan':      { name: 'ريان', password: 'rayan2024', pin: '6284' },
+        'supervisor_moayad':     { name: 'مؤيد رضا', password: 'moayad2024', pin: '3971' },
+        'supervisor_mohammed_a': { name: 'محمد علي', password: 'mohammed2024', pin: '8145' },
+        'supervisor_mohammed_t': { name: 'محمد طاهر', password: 'taher2024', pin: '2509' },
+        'supervisor_abdulaziz':  { name: 'عبد العزيز', password: 'abdulaziz2024', pin: '7630' }
+    };
+
+    // DOM
+    const loginOverlay = document.getElementById('loginOverlay');
+    const loginCard = document.getElementById('loginCard');
+    const usernameSelect = document.getElementById('usernameSelect');
+    const passwordInput = document.getElementById('passwordInput');
+    const pinInputs = document.querySelectorAll('.pin-input');
+    const loginBtn = document.getElementById('loginBtn');
+    const dashboard = document.getElementById('dashboard');
+    const sidebarSupervisorName = document.getElementById('sidebarSupervisorName');
+    const usersList = document.getElementById('usersList');
+    const searchInput = document.getElementById('searchInput');
+    const messagesView = document.getElementById('messagesView');
+    const chatInput = document.getElementById('chatInput');
+    const chatSendBtn = document.getElementById('chatSendBtn');
+    const chatUserName = document.getElementById('chatUserName');
+    const chatUserEmail = document.getElementById('chatUserEmail');
+    const chatUserAvatar = document.getElementById('chatUserAvatar');
+    const totalUsersEl = document.getElementById('totalUsers');
+    const totalMessagesEl = document.getElementById('totalMessages');
+    const unreadCountEl = document.getElementById('unreadCount');
+    const mobileToggle = document.getElementById('mobileToggle');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    let SUPERVISOR_ID = null;
+    let SUPERVISOR_NAME = null;
+    let activeUserId = null;
+    let allUsers = [];
+    let chatUnsub = null;
+    let usersUnsub = null;
+    let chatRef = null;
+
+    function showToast(msg, type) {
+        const old = document.querySelector('.toast-msg');
+        if (old) old.remove();
+        const t = document.createElement('div');
+        t.className = 'toast-msg ' + type;
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => { t.style.opacity = '0'; t.style.transition = '0.3s'; setTimeout(() => t.remove(), 300); }, 3000);
+    }
+
+    // PIN handling
+    function getPin() {
+        let p = '';
+        pinInputs.forEach(i => p += i.value);
+        return p;
+    }
+
+    function clearPin() {
+        pinInputs.forEach(i => { i.value = ''; i.classList.remove('filled'); });
+        pinInputs[0]?.focus();
+    }
+
+    pinInputs.forEach((inp, idx) => {
+        inp.addEventListener('input', e => {
+            const v = e.target.value.replace(/[^0-9]/g, '');
+            e.target.value = v;
+            if (v) { inp.classList.add('filled'); if (idx < 3) pinInputs[idx + 1].focus(); }
+            else inp.classList.remove('filled');
+        });
+        inp.addEventListener('keydown', e => {
+            if (e.key === 'Backspace' && !inp.value && idx > 0) {
+                pinInputs[idx - 1].focus();
+                pinInputs[idx - 1].classList.remove('filled');
+            }
+        });
+        inp.addEventListener('paste', e => {
+            e.preventDefault();
+            const paste = e.clipboardData.getData('text').replace(/[^0-9]/g, '').slice(0, 4);
+            if (paste.length > 0) {
+                pinInputs.forEach((p, i) => { p.value = paste[i] || ''; if (paste[i]) p.classList.add('filled'); else p.classList.remove('filled'); });
+                pinInputs[paste.length >= 4 ? 3 : Math.min(paste.length - 1, 3)].focus();
+            }
+        });
+    });
+
+    // LOGIN
+    function doLogin() {
+        const username = usernameSelect.value;
+        const password = passwordInput.value.trim();
+        const pin = getPin();
+
+        if (!username) { showToast('اختر اسم المستخدم', 'error'); loginCard.classList.add('shake'); setTimeout(() => loginCard.classList.remove('shake'), 300); return; }
+        if (!password) { showToast('أدخل كلمة المرور', 'error'); loginCard.classList.add('shake'); setTimeout(() => loginCard.classList.remove('shake'), 300); return; }
+        if (pin.length !== 4) { showToast('أدخل الرمز السري المكون من 4 أرقام', 'error'); loginCard.classList.add('shake'); setTimeout(() => loginCard.classList.remove('shake'), 300); return; }
+
+        const sup = supervisors[username];
+        if (!sup) { showToast('المشرف غير موجود', 'error'); return; }
+        if (sup.password !== password) { showToast('كلمة المرور غير صحيحة', 'error'); passwordInput.value = ''; loginCard.classList.add('shake'); setTimeout(() => loginCard.classList.remove('shake'), 300); return; }
+        if (sup.pin !== pin) { showToast('الرمز السري غير صحيح', 'error'); clearPin(); loginCard.classList.add('shake'); setTimeout(() => loginCard.classList.remove('shake'), 300); return; }
+
+        // SUCCESS
+        SUPERVISOR_ID = username;
+        SUPERVISOR_NAME = sup.name;
+
+        // Save session
+        sessionStorage.setItem('supervisor_session', JSON.stringify({
+            supervisorId: SUPERVISOR_ID,
+            supervisorName: SUPERVISOR_NAME,
+            loginTime: Date.now()
+        }));
+
+        // Show dashboard
+        loginOverlay.classList.add('hidden');
+        dashboard.style.display = 'flex';
+        initDashboard();
+
+        // Clear inputs
+        passwordInput.value = '';
+        clearPin();
+        showToast('مرحباً ' + SUPERVISOR_NAME + '!', 'success');
+    }
+
+    loginBtn.addEventListener('click', doLogin);
+    passwordInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); pinInputs[0]?.focus(); } });
+    pinInputs[3].addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doLogin(); } });
+
+    // DASHBOARD
+    function initDashboard() {
+        sidebarSupervisorName.textContent = SUPERVISOR_NAME;
+        listenUsers();
+        logoutBtn.onclick = handleLogout;
+        mobileToggle.onclick = openSidebar;
+        sidebarOverlay.onclick = closeSidebar;
+        searchInput.oninput = () => renderUsers(searchInput.value.trim());
+        chatSendBtn.onclick = sendMsg;
+        chatInput.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); sendMsg(); } };
+        window.addEventListener('beforeunload', cleanup);
+    }
+
+    function listenUsers() {
+        const queueRef = ref(db, 'support_queue');
+        usersUnsub = onValue(queueRef, snapshot => {
+            processData(snapshot.val());
+        }, err => console.error('Listen error:', err));
+    }
+
+    function processData(data) {
+        if (!data) { allUsers = []; renderUsers(); updateStats(); return; }
+        const map = {};
+        Object.keys(data).forEach(uid => {
+            const u = data[uid];
+            map[uid] = {
+                userId: uid,
+                userName: u.userName || 'مستخدم',
+                userEmail: u.userEmail || '',
+                lastMessage: u.lastMessage || '',
+                lastTimestamp: u.lastTimestamp || 0,
+                unreadCount: u.unreadCount || 0,
+                repliedBy: u.repliedBy || null
+            };
+        });
+        allUsers = Object.values(map).sort((a, b) => b.lastTimestamp - a.lastTimestamp);
+        renderUsers();
+        updateStats();
+        if (activeUserId && map[activeUserId]) updateTop(map[activeUserId]);
+    }
+
+    function renderUsers(filter = '') {
+        const list = filter ? allUsers.filter(u => u.userName.includes(filter) || u.userEmail.includes(filter)) : allUsers;
+        if (list.length === 0) {
+            usersList.innerHTML = '<div style="text-align:center;padding:50px;color:#94a3b8;"><i class="fas fa-inbox" style="font-size:40px;display:block;margin-bottom:10px;"></i><p>' + (filter ? 'لا توجد نتائج' : 'لا يوجد مستخدمين') + '</p></div>';
+            return;
+        }
+        usersList.innerHTML = list.map(u => {
+            const init = (u.userName || '?').substring(0, 2).toUpperCase();
+            const act = u.userId === activeUserId;
+            const unr = u.unreadCount > 0;
+            const replied = u.repliedBy;
+            return `
+                <div class="user-card${act ? ' active' : ''}" onclick="window.selectUser('${u.userId}', '${esc(u.userName)}', '${esc(u.userEmail)}')">
+                    <div class="row-flex">
+                        <div class="avatar">${init}</div>
+                        <div class="info">
+                            <div class="uname"><span>${u.userName}</span><span class="time">${timeAgo(u.lastTimestamp)}</span></div>
+                            <div class="uemail">${u.userEmail || ''} ${replied ? '<span class="replied-tag">✓ رد: ' + replied + '</span>' : ''}</div>
+                            <div style="display:flex;justify-content:space-between;align-items:center;">
+                                <div class="preview">${u.lastMessage || '...'}</div>
+                                ${unr ? '<div class="unread-badge">' + u.unreadCount + '</div>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+        }).join('');
+    }
+
+    function updateStats() {
+        totalUsersEl.textContent = allUsers.length;
+        totalMessagesEl.textContent = allUsers.length;
+        const ur = allUsers.reduce((s, u) => s + u.unreadCount, 0);
+        unreadCountEl.textContent = ur;
+        document.title = ur > 0 ? '(' + ur + ') لوحة التحكم' : 'لوحة التحكم';
+    }
+
+    window.selectUser = function(uid, uname, uemail) {
+        activeUserId = uid;
+        updateTop({ userName: uname, userEmail: uemail });
+        chatInput.disabled = false;
+        chatSendBtn.disabled = false;
+        chatInput.placeholder = 'رسالة إلى ' + uname + '...';
+        chatInput.focus();
+        subChat(uid);
+        renderUsers(searchInput.value);
+        markRead(uid);
+        closeSidebar();
+    };
+
+    function updateTop(u) {
+        chatUserName.textContent = u.userName || 'مستخدم';
+        chatUserEmail.textContent = u.userEmail || '';
+        chatUserAvatar.textContent = (u.userName || '?').substring(0, 2).toUpperCase();
+    }
+
+    function subChat(uid) {
+        if (chatUnsub && chatRef) { off(chatRef); chatUnsub = null; }
+        chatRef = ref(db, 'users/' + uid + '/messages');
+        chatUnsub = onValue(query(chatRef, orderByChild('timestamp'), limitToLast(100)), snap => renderChat(snap));
+    }
+
+    function renderChat(snap) {
+        const data = snap.val();
+        if (!data) { messagesView.innerHTML = '<div class="empty-view"><div class="circle"><i class="fas fa-comment-dots"></i></div><h4 style="color:#64748b;">لا توجد رسائل</h4></div>'; return; }
+        const list = Object.keys(data).map(k => ({ id: k, text: data[k].text, sender: data[k].sender, senderName: data[k].senderName, supervisorName: data[k].supervisorName, timestamp: data[k].timestamp }));
+        list.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+        let html = '', ld = '';
+        list.forEach(m => {
+            const md = m.timestamp ? fmtDate(m.timestamp) : '';
+            const isIn = m.sender === 'client';
+            const t = m.timestamp ? new Date(m.timestamp).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit', hour12: true }) : '';
+            const sn = m.supervisorName || '';
+            if (md && md !== ld) { html += '<div class="date-div">' + md + '</div>'; ld = md; }
+            html += '<div class="m-row ' + (isIn ? 'in' : 'out') + '"><div class="bubble ' + (isIn ? 'in' : 'out') + '">';
+            if (!isIn && sn) html += '<span class="supervisor-tag"><i class="fas fa-user-tie"></i> ' + sn + '</span>';
+            else if (isIn && m.senderName) html += '<span class="s">' + m.senderName + '</span>';
+            html += m.text + '<span class="t">' + t + '</span></div></div>';
+        });
+        messagesView.innerHTML = html;
+        messagesView.scrollTop = messagesView.scrollHeight;
+    }
+
+    async function markRead(uid) {
+        try { await update(ref(db, 'support_queue/' + uid), { unreadCount: 0 }); } catch (e) {}
+    }
+
+    async function sendMsg() {
+        const text = chatInput.value.trim();
+        if (!text || !activeUserId) return;
+        chatSendBtn.disabled = true;
+        try {
+            await set(push(ref(db, 'users/' + activeUserId + '/messages')), {
+                text, sender: 'supervisor', senderId: SUPERVISOR_ID, supervisorName: SUPERVISOR_NAME, timestamp: Date.now(), read: true
+            });
+            await update(ref(db, 'support_queue/' + activeUserId), {
+                lastMessage: text, lastTimestamp: Date.now(), unreadCount: 0, repliedBy: SUPERVISOR_NAME, status: 'replied'
+            });
+            chatInput.value = '';
+            chatInput.focus();
+        } catch (e) { console.error(e); }
+        chatSendBtn.disabled = false;
+    }
+
+    function handleLogout() {
+        if (confirm('تسجيل الخروج؟')) {
+            cleanup();
+            sessionStorage.removeItem('supervisor_session');
+            SUPERVISOR_ID = null; SUPERVISOR_NAME = null; activeUserId = null; allUsers = [];
+            loginOverlay.classList.remove('hidden');
+            dashboard.style.display = 'none';
+            showToast('تم تسجيل الخروج', 'info');
+        }
+    }
+
+    function cleanup() {
+        if (chatUnsub && chatRef) { off(chatRef); chatUnsub = null; }
+        if (usersUnsub) { off(ref(db, 'support_queue')); usersUnsub = null; }
+    }
+
+    function timeAgo(ts) {
+        if (!ts) return '';
+        const d = Date.now() - ts, m = Math.floor(d / 60000);
+        if (m < 1) return 'الآن';
+        if (m < 60) return 'منذ ' + m + 'د';
+        const h = Math.floor(d / 3600000);
+        if (h < 24) return 'منذ ' + h + 'س';
+        return new Date(ts).toLocaleDateString('ar-SA', { month: 'short', day: 'numeric' });
+    }
+
+    function fmtDate(ts) {
+        const d = new Date(ts), diff = Math.floor((new Date() - d) / 86400000);
+        if (diff === 0) return 'اليوم';
+        if (diff === 1) return 'أمس';
+        return d.toLocaleDateString('ar-SA', { weekday: 'long', month: 'long', day: 'numeric' });
+    }
+
+    function esc(s) { const div = document.createElement('div'); div.textContent = s; return div.innerHTML.replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
+
+    function openSidebar() { sidebar.classList.add('open'); sidebarOverlay.classList.add('show'); }
+    function closeSidebar() { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('show'); }
+
+    // Check existing session
+    (function checkSession() {
+        try {
+            const saved = JSON.parse(sessionStorage.getItem('supervisor_session') || 'null');
+            if (saved && saved.supervisorId && saved.supervisorName && supervisors[saved.supervisorId]) {
+                const elapsed = Date.now() - saved.loginTime;
+                if (elapsed < 8 * 60 * 60 * 1000) {
+                    SUPERVISOR_ID = saved.supervisorId;
+                    SUPERVISOR_NAME = saved.supervisorName;
+                    loginOverlay.classList.add('hidden');
+                    dashboard.style.display = 'flex';
+                    initDashboard();
+                    return;
+                }
+            }
+        } catch (e) {}
+        sessionStorage.removeItem('supervisor_session');
+    })();
+
+    console.log('✅ جاهز | للتجربة: حسين العصاري | hussain2024 | 4821');
+</script>
+</body>
+</html>
