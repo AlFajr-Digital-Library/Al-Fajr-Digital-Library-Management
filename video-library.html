@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مكتبة الفيديوهات</title>
+    <link rel="icon" type="image/x-icon" href="img\logo library.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="auth-check.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        html, body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #121212;
+            color: #ffffff;
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+        
+        :root {
+            --primary-color: #FF6B35;
+            --secondary-color: #4285F4;
+            --accent-color: #FFAB00;
+            --dark-bg: #121212;
+            --darker-bg: #0d0d0d;
+            --card-bg: #1e1e1e;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #888;
+            --border-color: #333;
+            --success-color: #34A853;
+            --error-color: #EA4335;
+            --gradient-primary: linear-gradient(135deg, #FF6B35, #FF8E53);
+            --gradient-secondary: linear-gradient(135deg, #4285F4, #669DF6);
+            --gradient-accent: linear-gradient(135deg, #FFAB00, #FFC107);
+            --border-radius-sm: 8px;
+            --border-radius-md: 12px;
+            --border-radius-lg: 16px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
+            --safe-area-top: env(safe-area-inset-top, 0px);
+            --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px 15px;
+            padding-top: calc(10px + var(--safe-area-top));
+            padding-bottom: calc(10px + var(--safe-area-bottom));
+        }
+        
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .header h1 {
+            font-size: clamp(18px, 4vw, 28px);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            word-break: break-word;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .header-actions button {
+            padding: 8px 16px;
+            background: var(--darker-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: clamp(12px, 1.5vw, 14px);
+            white-space: nowrap;
+            touch-action: manipulation;
+        }
+        
+        .header-actions button:hover {
+            background: var(--gradient-primary);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        .header-actions button:active {
+            transform: scale(0.95);
+        }
+        
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: var(--border-radius-md);
+            border-right: 3px solid var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+        
+        .stat-card .label {
+            color: var(--text-muted);
+            font-size: clamp(11px, 1.2vw, 13px);
+        }
+        
+        .stat-card .value {
+            font-size: clamp(20px, 2.5vw, 28px);
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+        
+        .filter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-tab {
+            padding: 8px 16px;
+            background: var(--darker-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: clamp(12px, 1.2vw, 14px);
+            touch-action: manipulation;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .filter-tab.active {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .filter-tab:active {
+            transform: scale(0.95);
+        }
+        
+        .search-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .search-section input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
+            background: var(--darker-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            color: var(--text-primary);
+            font-size: clamp(12px, 1.3vw, 14px);
+        }
+        
+        .search-section button {
+            padding: 10px 20px;
+            background: var(--gradient-secondary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: clamp(12px, 1.3vw, 14px);
+            touch-action: manipulation;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .search-section button:active {
+            transform: scale(0.95);
+        }
+        
+        .upload-section {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--border-radius-md);
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        
+        .upload-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 12px;
+            font-size: clamp(16px, 1.8vw, 20px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .upload-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .upload-area input[type="file"] {
+            display: none;
+        }
+        
+        .upload-area .upload-btn {
+            padding: 10px 24px;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: clamp(12px, 1.3vw, 14px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            touch-action: manipulation;
+        }
+        
+        .upload-area .upload-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .upload-info {
+            color: var(--text-muted);
+            font-size: clamp(11px, 1.1vw, 13px);
+        }
+        
+        .upload-progress {
+            margin-top: 12px;
+            padding: 12px;
+            background: var(--darker-bg);
+            border-radius: var(--border-radius-sm);
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .video-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .video-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+        
+        .video-card .thumbnail {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .video-card .thumbnail video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-card .thumbnail .play-icon {
+            position: absolute;
+            font-size: 48px;
+            color: white;
+            opacity: 0.7;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        }
+        
+        .video-card .thumbnail .source-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .source-youtube .source-badge { background: #FF0000; }
+        .source-firebase .source-badge { background: var(--secondary-color); }
+        .source-code .source-badge { background: var(--accent-color); color: #000; }
+        
+        .video-card .info {
+            padding: 15px;
+        }
+        
+        .video-card .info .name {
+            font-weight: 600;
+            font-size: clamp(14px, 1.4vw, 16px);
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            word-break: break-all;
+        }
+        
+        .video-card .info .code {
+            color: var(--accent-color);
+            font-size: clamp(12px, 1.2vw, 14px);
+            font-weight: bold;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        
+        .video-card .info .code:hover {
+            color: var(--primary-color);
+        }
+        
+        .video-card .info .code i {
+            font-size: 14px;
+        }
+        
+        .video-card .info .meta {
+            color: var(--text-muted);
+            font-size: clamp(11px, 1.1vw, 13px);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .video-card .info .meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .video-card .actions {
+            padding: 12px 15px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .video-card .actions button {
+            flex: 1;
+            min-width: 80px;
+            padding: 6px 12px;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-size: clamp(11px, 1.1vw, 13px);
+            touch-action: manipulation;
+        }
+        
+        .video-card .actions button:active {
+            transform: scale(0.95);
+        }
+        
+        .video-card .actions .copy-btn {
+            background: var(--gradient-secondary);
+            color: white;
+        }
+        
+        .video-card .actions .delete-btn {
+            background: var(--gradient-primary);
+            color: white;
+        }
+        
+        .video-card .actions .view-btn {
+            background: var(--gradient-accent);
+            color: white;
+        }
+        
+        .video-card .actions .import-btn {
+            background: var(--gradient-primary);
+            color: white;
+        }
+        
+        .no-data {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+        
+        .no-data i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            left: 15px;
+            padding: 14px 20px;
+            border-radius: var(--border-radius-sm);
+            color: white;
+            z-index: 10000;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: clamp(13px, 1.3vw, 15px);
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-20px); opacity: 0; }
+        }
+        
+        .notification-success { background: #34A853; }
+        .notification-error { background: #EA4335; }
+        .notification-warning { background: #FBBC05; }
+        .notification-info { background: #4285F4; }
+        
+        .loading {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 0.8s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-lg);
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .modal-header h2 {
+            color: var(--primary-color);
+            font-size: clamp(18px, 2vw, 24px);
+        }
+        
+        .modal-header .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0 10px;
+        }
+        
+        .modal-body {
+            padding: 10px 0;
+        }
+        
+        .modal-body .video-preview {
+            width: 100%;
+            max-height: 300px;
+            background: #000;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 15px;
+        }
+        
+        .modal-body .video-info {
+            color: var(--text-secondary);
+        }
+        
+        .modal-body .video-info .label {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+        
+        .modal-body .video-info .value {
+            color: var(--text-primary);
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .modal-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: flex-end;
+        }
+        
+        .modal-actions button {
+            padding: 10px 24px;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: clamp(13px, 1.3vw, 14px);
+            touch-action: manipulation;
+        }
+        
+        .modal-actions .close-btn {
+            background: var(--darker-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        .modal-actions .copy-btn {
+            background: var(--gradient-secondary);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .videos-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .videos-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            
+            .header-actions {
+                justify-content: center;
+            }
+            
+            .upload-area {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .stats-bar {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .filter-tabs {
+                justify-content: center;
+            }
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--darker-bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-video"></i>
+                مكتبة الفيديوهات
+                <span style="font-size: 14px; color: var(--text-muted); -webkit-text-fill-color: var(--text-muted);">
+                    <i class="fas fa-info-circle"></i>
+                    جميع الفيديوهات من جميع المصادر
+                </span>
+            </h1>
+            <div class="header-actions">
+                <button onclick="window.location.href='manage-products.html'">
+                    <i class="fas fa-arrow-right"></i>
+                    العودة لإدارة المنتجات
+                </button>
+                <button onclick="refreshVideos()">
+                    <i class="fas fa-sync"></i>
+                    تحديث
+                </button>
+            </div>
+        </div>
+        
+        <div class="stats-bar" id="stats-bar">
+            <div class="stat-card">
+                <div class="label">إجمالي الفيديوهات</div>
+                <div class="value" id="total-videos">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">فيديوهات Firebase</div>
+                <div class="value" id="firebase-count">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">فيديوهات يوتيوب</div>
+                <div class="value" id="youtube-count">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">الحجم الإجمالي</div>
+                <div class="value" id="total-size">0 MB</div>
+            </div>
+        </div>
+        
+        <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterVideos('all')">
+                <i class="fas fa-list"></i> الكل
+            </button>
+            <button class="filter-tab" onclick="filterVideos('firebase')">
+                <i class="fas fa-cloud"></i> Firebase
+            </button>
+            <button class="filter-tab" onclick="filterVideos('youtube')">
+                <i class="fab fa-youtube"></i> يوتيوب
+            </button>
+            <button class="filter-tab" onclick="filterVideos('code')">
+                <i class="fas fa-code"></i> كود
+            </button>
+        </div>
+        
+        <div class="search-section">
+            <input type="text" id="search-input" placeholder="ابحث عن فيديو بالاسم أو الرقم...">
+            <button onclick="searchVideos()">
+                <i class="fas fa-search"></i> بحث
+            </button>
+            <button onclick="clearSearch()" style="background: var(--darker-bg); border: 1px solid var(--border-color);">
+                <i class="fas fa-times"></i> مسح
+            </button>
+        </div>
+        
+        <div class="upload-section">
+            <h3>
+                <i class="fas fa-upload"></i>
+                رفع فيديو جديد إلى Firebase
+            </h3>
+            <div class="upload-area">
+                <input type="file" id="video-upload-input" accept="video/*" multiple onchange="handleVideoUpload(event)">
+                <button class="upload-btn" onclick="document.getElementById('video-upload-input').click()">
+                    <i class="fas fa-plus"></i>
+                    اختيار فيديو
+                </button>
+                <div class="upload-info">
+                    <i class="fas fa-info-circle"></i>
+                    MP4, WebM, OGG • الحد الأقصى: 50MB • سيتم إنشاء رقم تلقائي لكل فيديو
+                </div>
+            </div>
+            <div id="upload-progress" class="upload-progress">
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <span class="loading"></span>
+                    <span id="progress-text">جاري الرفع...</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-info" style="display: flex; justify-content: space-between; color: var(--text-muted); font-size: 12px; margin-top: 4px;">
+                    <span id="uploaded-size">0 MB</span>
+                    <span id="total-size-text">0 MB</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="videos-grid" id="videos-grid">
+            <!-- سيتم ملؤها -->
+        </div>
+    </div>
+    
+    <!-- ====== نافذة معاينة الفيديو ====== -->
+    <div id="preview-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-eye"></i> معاينة الفيديو</h2>
+                <button class="close-modal" onclick="closePreviewModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <video id="preview-video" class="video-preview" controls></video>
+                <div class="video-info">
+                    <div>
+                        <div class="label">اسم الفيديو</div>
+                        <div class="value" id="preview-name">-</div>
+                    </div>
+                    <div>
+                        <div class="label">رقم الفيديو</div>
+                        <div class="value" id="preview-code" style="color: var(--accent-color);">-</div>
+                    </div>
+                    <div>
+                        <div class="label">المصدر</div>
+                        <div class="value" id="preview-source">-</div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="close-btn" onclick="closePreviewModal()">إغلاق</button>
+                    <button class="copy-btn" onclick="copyPreviewCode()">
+                        <i class="fas fa-copy"></i> نسخ الرقم
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL, listAll, deleteObject } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
+        
+        let firebaseApp, firebaseAuth, firebaseStorage;
+        let allVideos = [];
+        let searchTerm = '';
+        let currentFilter = 'all';
+        let previewVideoData = null;
+        
+        // ====== فيديوهات يوتيوب تجريبية ======
+        const youtubeVideos = [
+            { code: 'youtube_abc123', name: 'فيديو يوتيوب تجريبي 1', url: 'https://www.youtube.com/watch?v=abc123' },
+            { code: 'youtube_xyz789', name: 'فيديو يوتيوب تجريبي 2', url: 'https://www.youtube.com/watch?v=xyz789' }
+        ];
+        
+        async function initializeFirebase() {
+            try {
+                const firebaseConfig = {
+                    apiKey: "AIzaSyBlcKC2ncX9mTOPlhDOnfmyzdJ5mLinWYY",
+                    authDomain: "al-fajr-digital-library.firebaseapp.com",
+                    databaseURL: "https://al-fajr-digital-library-default-rtdb.firebaseio.com",
+                    projectId: "al-fajr-digital-library",
+                    storageBucket: "al-fajr-digital-library.firebasestorage.app",
+                    messagingSenderId: "739899495618",
+                    appId: "1:739899495618:web:8e60409193ec1408b4d75b",
+                    measurementId: "G-FFRQP9CXYK"
+                };
+                
+                firebaseApp = initializeApp(firebaseConfig);
+                firebaseAuth = getAuth(firebaseApp);
+                firebaseStorage = getStorage(firebaseApp);
+                getAnalytics(firebaseApp);
+                return true;
+            } catch (error) {
+                console.error("Firebase initialization error:", error);
+                showNotification('خطأ في تهيئة قاعدة البيانات', 'error');
+                return false;
+            }
+        }
+        
+        function checkAdminAuth() {
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            if (!user || !user.uid) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+        
+        function showNotification(message, type = 'info') {
+            const existing = document.querySelector('.notification');
+            if (existing) existing.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+            notification.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i><span>${message}</span>`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => notification.remove(), 300);
+            }, 3500);
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function extractYoutubeId(url) {
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/
+            ];
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match && match[1]) return match[1];
+            }
+            return null;
+        }
+        
+        async function loadVideos() {
+            try {
+                allVideos = [];
+                let firebaseVideos = [];
+                let totalSize = 0;
+                let latestDate = null;
+                
+                // 1. تحميل فيديوهات Firebase
+                const folders = ['gallery/videos', 'products/videos', 'videos/library'];
+                for (const folder of folders) {
+                    try {
+                        const folderRef = ref(firebaseStorage, folder);
+                        const listResult = await listAll(folderRef);
+                        
+                        for (const itemRef of listResult.items) {
+                            try {
+                                const url = await getDownloadURL(itemRef);
+                                const metadata = await itemRef.getMetadata();
+                                totalSize += metadata.size;
+                                
+                                const nameWithoutExt = itemRef.name.split('.')[0];
+                                
+                                firebaseVideos.push({
+                                    name: itemRef.name,
+                                    url: url,
+                                    fullPath: itemRef.fullPath,
+                                    size: metadata.size,
+                                    sizeFormatted: formatFileSize(metadata.size),
+                                    contentType: metadata.contentType,
+                                    updated: metadata.updated || new Date().toISOString(),
+                                    code: nameWithoutExt,
+                                    source: 'firebase',
+                                    sourceLabel: 'Firebase Storage',
+                                    type: 'firebase',
+                                    sourceClass: 'source-firebase'
+                                });
+                                
+                                if (metadata.updated && (!latestDate || new Date(metadata.updated) > new Date(latestDate))) {
+                                    latestDate = metadata.updated;
+                                }
+                            } catch (e) {
+                                console.error('Error getting video data:', e);
+                            }
+                        }
+                    } catch (e) {
+                        console.error(`Error listing ${folder}:`, e);
+                    }
+                }
+                
+                // 2. إضافة فيديوهات يوتيوب
+                const youtubeList = youtubeVideos.map(v => ({
+                    name: v.name,
+                    url: v.url,
+                    code: v.code,
+                    source: 'youtube',
+                    sourceLabel: 'يوتيوب',
+                    type: 'youtube',
+                    sourceClass: 'source-youtube',
+                    sizeFormatted: 'غير معروف',
+                    updated: new Date().toISOString(),
+                    size: 0,
+                    isYoutube: true
+                }));
+                
+                // 3. إضافة فيديوهات كود (يمكن إضافتها يدوياً أو من قاعدة البيانات)
+                const codeVideos = [
+                    // يمكن إضافة فيديوهات الكود هنا
+                ];
+                
+                // دمج جميع الفيديوهات
+                allVideos = [...firebaseVideos, ...youtubeList, ...codeVideos];
+                
+                // ترتيب حسب الأحدث
+                allVideos.sort((a, b) => new Date(b.updated) - new Date(a.updated));
+                
+                // تحديث الإحصائيات
+                document.getElementById('total-videos').textContent = allVideos.length;
+                document.getElementById('firebase-count').textContent = firebaseVideos.length;
+                document.getElementById('youtube-count').textContent = youtubeList.length;
+                document.getElementById('total-size').textContent = formatFileSize(totalSize);
+                
+                renderVideos();
+            } catch (error) {
+                console.error("Error loading videos:", error);
+                showNotification('خطأ في تحميل الفيديوهات', 'error');
+            }
+        }
+        
+        function renderVideos() {
+            const grid = document.getElementById('videos-grid');
+            if (!grid) return;
+            
+            let filtered = allVideos;
+            
+            // تطبيق الفلتر
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(v => v.type === currentFilter);
+            }
+            
+            // تطبيق البحث
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                filtered = filtered.filter(v => 
+                    v.name.toLowerCase().includes(term) ||
+                    v.code.toLowerCase().includes(term)
+                );
+            }
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-data">
+                        <i class="fas fa-video-slash"></i>
+                        <div style="font-size: clamp(16px, 2vw, 20px); margin-bottom: 8px;">لا توجد فيديوهات</div>
+                        <div style="font-size: clamp(12px, 1.2vw, 14px);">قم برفع فيديو جديد أو أضف فيديو يوتيوب</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = '';
+            filtered.forEach((video, index) => {
+                const card = document.createElement('div');
+                card.className = `video-card ${video.sourceClass || ''}`;
+                
+                const isYoutube = video.source === 'youtube';
+                const sourceBadge = video.source === 'firebase' ? 'Firebase' : 
+                                    video.source === 'youtube' ? 'يوتيوب' : 'كود';
+                
+                card.innerHTML = `
+                    <div class="thumbnail">
+                        ${isYoutube ? 
+                            `<img src="https://img.youtube.com/vi/${extractYoutubeId(video.url) || ''}/hqdefault.jpg" alt="${video.name}" style="width:100%;height:100%;object-fit:cover;">` :
+                            `<video src="${video.url}" muted preload="metadata"></video>`
+                        }
+                        <div class="play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="source-badge">${sourceBadge}</div>
+                    </div>
+                    <div class="info">
+                        <div class="name">${video.name}</div>
+                        <div class="code" onclick="copyVideoCode('${video.code}')" title="انقر لنسخ الرقم">
+                            <i class="fas fa-fingerprint"></i>
+                            الرقم: ${video.code}
+                            <i class="fas fa-copy" style="font-size: 12px; opacity: 0.5;"></i>
+                        </div>
+                        <div class="meta">
+                            <span><i class="fas fa-database"></i> ${video.sourceLabel}</span>
+                            ${video.sizeFormatted ? `<span><i class="fas fa-file"></i> ${video.sizeFormatted}</span>` : ''}
+                            ${video.updated ? `<span><i class="fas fa-calendar"></i> ${new Date(video.updated).toLocaleDateString('ar')}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="copy-btn" onclick="copyVideoCode('${video.code}')">
+                            <i class="fas fa-copy"></i> نسخ الرقم
+                        </button>
+                        <button class="view-btn" onclick="previewVideo('${video.url}', '${video.name}', '${video.code}', '${video.sourceLabel}')">
+                            <i class="fas fa-eye"></i> معاينة
+                        </button>
+                        ${video.source === 'firebase' ? `
+                            <button class="delete-btn" onclick="deleteVideo('${video.fullPath}', ${index})">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                        ` : ''}
+                        <button class="import-btn" onclick="importToProduct('${video.code}')">
+                            <i class="fas fa-arrow-left"></i> استيراد
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        function filterVideos(source) {
+            currentFilter = source;
+            document.querySelectorAll('.filter-tab').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderVideos();
+        }
+        
+        function searchVideos() {
+            const input = document.getElementById('search-input');
+            searchTerm = input.value.trim();
+            renderVideos();
+        }
+        
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            searchTerm = '';
+            renderVideos();
+        }
+        
+        function copyVideoCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                showNotification(`تم نسخ الرقم: ${code}`, 'success');
+            }).catch(() => {
+                const textArea = document.createElement('textarea');
+                textArea.value = code;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                textArea.remove();
+                showNotification(`تم نسخ الرقم: ${code}`, 'success');
+            });
+        }
+        
+        function previewVideo(url, name, code, source) {
+            const modal = document.getElementById('preview-modal');
+            const video = document.getElementById('preview-video');
+            const isYoutube = source === 'يوتيوب';
+            
+            if (isYoutube) {
+                const youtubeId = extractYoutubeId(url);
+                if (youtubeId) {
+                    video.innerHTML = `<source src="https://www.youtube.com/embed/${youtubeId}" type="text/html">`;
+                } else {
+                    video.innerHTML = `<source src="${url}" type="video/mp4">`;
+                }
+            } else {
+                video.innerHTML = `<source src="${url}" type="video/mp4">`;
+            }
+            
+            video.load();
+            
+            document.getElementById('preview-name').textContent = name;
+            document.getElementById('preview-code').textContent = code;
+            document.getElementById('preview-source').textContent = source;
+            
+            previewVideoData = { code, name, url, source };
+            modal.style.display = 'flex';
+        }
+        
+        function closePreviewModal() {
+            document.getElementById('preview-modal').style.display = 'none';
+            const video = document.getElementById('preview-video');
+            video.pause();
+            video.innerHTML = '';
+            previewVideoData = null;
+        }
+        
+        function copyPreviewCode() {
+            if (previewVideoData) {
+                copyVideoCode(previewVideoData.code);
+            }
+        }
+        
+        function importToProduct(code) {
+            // نسخ الرقم وإظهار رسالة
+            copyVideoCode(code);
+            showNotification('يمكنك الآن لصق هذا الرقم في صفحة إدارة المنتجات', 'info');
+        }
+        
+        async function deleteVideo(fullPath, index) {
+            if (!confirm('هل أنت متأكد من حذف هذا الفيديو؟')) return;
+            
+            try {
+                const fileRef = ref(firebaseStorage, fullPath);
+                await deleteObject(fileRef);
+                showNotification('تم حذف الفيديو بنجاح', 'success');
+                await loadVideos();
+            } catch (error) {
+                console.error('Error deleting video:', error);
+                showNotification('خطأ في حذف الفيديو', 'error');
+            }
+        }
+        
+        function refreshVideos() {
+            loadVideos();
+            showNotification('تم تحديث المكتبة', 'info');
+        }
+        
+        async function handleVideoUpload(event) {
+            const files = Array.from(event.target.files);
+            if (files.length === 0) return;
+            
+            const progressDiv = document.getElementById('upload-progress');
+            const progressFill = document.getElementById('progress-fill');
+            const progressText = document.getElementById('progress-text');
+            const uploadedSize = document.getElementById('uploaded-size');
+            const totalSizeText = document.getElementById('total-size-text');
+            
+            progressDiv.style.display = 'block';
+            let uploaded = 0;
+            let total = files.reduce((sum, f) => sum + f.size, 0);
+            totalSizeText.textContent = formatFileSize(total);
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                
+                if (!file.type.startsWith('video/')) {
+                    showNotification(`الملف ${file.name} ليس فيديو`, 'error');
+                    continue;
+                }
+                
+                if (file.size > 50 * 1024 * 1024) {
+                    showNotification(`حجم الفيديو ${file.name} كبير جداً (الحد الأقصى 50MB)`, 'error');
+                    continue;
+                }
+                
+                try {
+                    const timestamp = Date.now();
+                    const randomStr = Math.random().toString(36).substring(2, 8);
+                    const fileExt = file.name.split('.').pop();
+                    const videoCode = `video_${timestamp}_${randomStr}`;
+                    const fileName = `${videoCode}.${fileExt}`;
+                    
+                    progressText.textContent = `جاري رفع ${file.name}...`;
+                    
+                    const storageReference = ref(firebaseStorage, `gallery/videos/${fileName}`);
+                    await uploadBytes(storageReference, file);
+                    const downloadURL = await getDownloadURL(storageReference);
+                    
+                    uploaded += file.size;
+                    const progress = (uploaded / total) * 100;
+                    progressFill.style.width = `${progress}%`;
+                    uploadedSize.textContent = formatFileSize(uploaded);
+                    
+                    showNotification(`تم رفع ${file.name} بنجاح - الرقم: ${videoCode}`, 'success');
+                } catch (error) {
+                    console.error('Error uploading video:', error);
+                    showNotification(`خطأ في رفع ${file.name}`, 'error');
+                }
+            }
+            
+            progressDiv.style.display = 'none';
+            progressFill.style.width = '0%';
+            document.getElementById('video-upload-input').value = '';
+            
+            await loadVideos();
+        }
+        
+        // ====== تهيئة الصفحة ======
+        async function initializePage() {
+            if (!checkAdminAuth()) return;
+            const initialized = await initializeFirebase();
+            if (!initialized) { showNotification('خطأ في الاتصال بقاعدة البيانات', 'error'); return; }
+            await loadVideos();
+            
+            document.getElementById('search-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') searchVideos();
+            });
+            
+            // إغلاق المودال عند النقر خارجها
+            document.getElementById('preview-modal').addEventListener('click', function(e) {
+                if (e.target === this) closePreviewModal();
+            });
+        }
+        
+        // تصدير الدوال
+        window.copyVideoCode = copyVideoCode;
+        window.previewVideo = previewVideo;
+        window.deleteVideo = deleteVideo;
+        window.searchVideos = searchVideos;
+        window.clearSearch = clearSearch;
+        window.refreshVideos = refreshVideos;
+        window.handleVideoUpload = handleVideoUpload;
+        window.filterVideos = filterVideos;
+        window.importToProduct = importToProduct;
+        window.closePreviewModal = closePreviewModal;
+        window.copyPreviewCode = copyPreviewCode;
+        
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>

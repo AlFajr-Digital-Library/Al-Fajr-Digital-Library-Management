@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>نظام إدارة المستخدمين المتقدم - مكتبة الفجر</title>
+<title>لوحة تحكم المشرفين - مكتبة الفجر الرقمية</title>
 <link rel="icon" type="image/x-icon" href="img/Login library.jpg">
 
 <script type="module">
@@ -145,17 +145,12 @@
     --bg-input: rgba(255, 255, 255, 0.06);
     --text-primary: #ffffff;
     --text-secondary: #b0b0c8;
-    --text-muted: #6B6B8A;
     --success: #00B894;
     --error: #FF7675;
     --info: #74B9FF;
     --warning: #FDCB6E;
     --border: rgba(108, 92, 231, 0.2);
     --glow: 0 0 40px rgba(108, 92, 231, 0.15);
-    
-    --radius: 16px;
-    --radius-sm: 10px;
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   * {
@@ -575,78 +570,6 @@
     color: var(--text-primary);
   }
 
-  /* ====== أزرار التصفية ====== */
-  .filter-controls {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-    background: var(--bg-card);
-    padding: 15px 20px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-  }
-
-  .filter-controls input {
-    padding: 10px 16px;
-    background: var(--bg-input);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    color: var(--text-primary);
-    font-family: 'Cairo', sans-serif;
-    font-size: 13px;
-    flex: 1;
-    min-width: 150px;
-  }
-
-  .filter-controls input:focus {
-    outline: none;
-    border-color: var(--primary);
-  }
-
-  .filter-controls input::placeholder {
-    color: rgba(255, 255, 255, 0.3);
-  }
-
-  .filter-controls .filter-btn {
-    padding: 8px 18px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text-secondary);
-    cursor: pointer;
-    font-family: 'Cairo', sans-serif;
-    font-size: 13px;
-    transition: all 0.3s;
-  }
-
-  .filter-controls .filter-btn:hover {
-    background: rgba(108, 92, 231, 0.1);
-    color: var(--primary-light);
-  }
-
-  .filter-controls .filter-btn.active {
-    background: rgba(108, 92, 231, 0.2);
-    color: var(--primary-light);
-    border-color: var(--primary);
-  }
-
-  .filter-controls .export-btn {
-    padding: 8px 18px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: rgba(0, 184, 148, 0.15);
-    color: var(--success);
-    cursor: pointer;
-    font-family: 'Cairo', sans-serif;
-    font-size: 13px;
-    transition: all 0.3s;
-  }
-
-  .filter-controls .export-btn:hover {
-    background: rgba(0, 184, 148, 0.25);
-  }
-
   /* ====== أقسام المستخدمين ====== */
   .users-section {
     margin-bottom: 25px;
@@ -677,7 +600,7 @@
 
   .users-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 15px;
   }
 
@@ -701,7 +624,7 @@
     position: absolute;
     top: 12px;
     left: 12px;
-    padding: 4px 14px;
+    padding: 3px 12px;
     border-radius: 20px;
     font-size: 11px;
     font-weight: 600;
@@ -711,11 +634,6 @@
   .status-badge.pending { background: rgba(253, 203, 110, 0.2); color: var(--gold); }
   .status-badge.blocked { background: rgba(255, 118, 117, 0.2); color: var(--error); }
   .status-badge.review { background: rgba(116, 185, 255, 0.2); color: var(--info); }
-  .status-badge.online { background: rgba(108, 92, 231, 0.2); color: var(--primary-light); }
-  .status-badge.active { background: rgba(0, 184, 148, 0.2); color: var(--success); }
-  .status-badge.inactive { background: rgba(107, 107, 138, 0.2); color: var(--text-muted); }
-  .status-badge.frozen { background: rgba(253, 203, 110, 0.2); color: var(--gold); }
-  .status-badge.admin { background: linear-gradient(135deg, rgba(108, 92, 231, 0.3), rgba(253, 203, 110, 0.2)); color: var(--primary-light); }
 
   .user-card .user-info {
     display: flex;
@@ -736,13 +654,6 @@
     font-weight: 700;
     color: white;
     flex-shrink: 0;
-  }
-
-  .user-card .user-avatar img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
   }
 
   .user-card .user-details h4 {
@@ -873,36 +784,16 @@
     background: rgba(116, 185, 255, 0.3);
   }
 
-  .btn-freeze {
-    background: rgba(253, 203, 110, 0.15);
-    color: var(--gold);
-    border: 1px solid rgba(253, 203, 110, 0.2);
-  }
-
-  .btn-freeze:hover {
-    background: rgba(253, 203, 110, 0.25);
-  }
-
-  .btn-unfreeze {
-    background: rgba(0, 184, 148, 0.15);
-    color: var(--success);
-    border: 1px solid rgba(0, 184, 148, 0.2);
-  }
-
-  .btn-unfreeze:hover {
-    background: rgba(0, 184, 148, 0.25);
-  }
-
   .empty-state {
     text-align: center;
-    padding: 60px 20px;
+    padding: 40px;
     color: var(--text-secondary);
     grid-column: 1 / -1;
   }
 
   .empty-state i {
-    font-size: 48px;
-    margin-bottom: 15px;
+    font-size: 40px;
+    margin-bottom: 10px;
     opacity: 0.3;
   }
 
@@ -1153,70 +1044,58 @@
   .toast.info { background: var(--info); color: #000; }
   .toast.warning { background: var(--warning); color: #000; }
 
-  /* ====== نافذة تفاصيل المستخدم ====== */
-  .user-details-modal .modal-content {
-    background: var(--bg-card);
-    border-radius: 22px;
+  /* ====== تصفية ====== */
+  .filter-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+  }
+
+  .filter-controls input {
+    padding: 8px 16px;
+    background: var(--bg-input);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-family: 'Cairo', sans-serif;
+    font-size: 13px;
+    flex: 1;
+    min-width: 150px;
+  }
+
+  .filter-controls input:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+
+  .filter-controls input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .filter-controls .filter-btn {
+    padding: 8px 18px;
+    border-radius: 10px;
     border: 1px solid var(--border);
-    color: var(--text-primary);
-  }
-
-  .user-details-modal .modal-header {
-    border-bottom: 1px solid var(--border);
-    padding: 18px 24px;
-  }
-
-  .user-details-modal .modal-body {
-    padding: 24px;
-  }
-
-  .user-details-modal .modal-footer {
-    border-top: 1px solid var(--border);
-    padding: 14px 24px;
-  }
-
-  .user-details-modal .btn-close {
-    filter: invert(1);
-  }
-
-  .detail-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  .detail-row .label {
+    background: var(--bg-card);
     color: var(--text-secondary);
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 13px;
+    transition: all 0.3s;
   }
 
-  .detail-row .value {
-    color: var(--text-primary);
-    font-weight: 500;
+  .filter-controls .filter-btn:hover {
+    background: rgba(108, 92, 231, 0.1);
+    color: var(--primary-light);
   }
 
-  .detail-avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    font-weight: 700;
-    color: white;
-    margin: 0 auto 15px;
+  .filter-controls .filter-btn.active {
+    background: rgba(108, 92, 231, 0.2);
+    color: var(--primary-light);
+    border-color: var(--primary);
   }
 
-  .detail-avatar img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  /* ====== استجابة ====== */
   @media (max-width: 768px) {
     .main-content {
       padding: 75px 15px 15px;
@@ -1246,24 +1125,11 @@
       padding: 20px;
       max-height: 90vh;
     }
-
-    .filter-controls {
-      flex-direction: column;
-    }
-
-    .filter-controls input {
-      width: 100%;
-    }
   }
 
   @media (max-width: 480px) {
     .stats-cards {
       grid-template-columns: 1fr;
-    }
-
-    .login-box {
-      padding: 30px 20px;
-      margin: 0 15px;
     }
   }
 </style>
@@ -1275,7 +1141,7 @@
 
 <div class="particles" id="particles"></div>
 
-<!-- ====== صفحة تسجيل الدخول ====== -->
+<!-- صفحة تسجيل الدخول -->
 <div class="login-container" id="loginContainer">
   <div class="login-box">
     <div class="logo">
@@ -1286,12 +1152,12 @@
     
     <div class="input-group">
       <i class="fas fa-envelope"></i>
-      <input type="email" id="adminEmail" placeholder="البريد الإلكتروني للمشرف" value="hussain.alasari@alfajr.com" />
+      <input type="email" id="adminEmail" placeholder="البريد الإلكتروني للمشرف" />
     </div>
     
     <div class="input-group">
       <i class="fas fa-lock"></i>
-      <input type="password" id="adminPassword" placeholder="كلمة المرور" value="Hussain@2024AlFajr#Secure" />
+      <input type="password" id="adminPassword" placeholder="كلمة المرور" />
     </div>
     
     <button class="login-btn" id="adminLoginBtn">
@@ -1302,7 +1168,7 @@
   </div>
 </div>
 
-<!-- ====== الهيدر العلوي ====== -->
+<!-- الهيدر العلوي -->
 <header class="top-header" id="topHeader" style="display: none;">
   <div class="brand">
     <i class="fas fa-shield-alt"></i>
@@ -1323,7 +1189,7 @@
   </div>
 </header>
 
-<!-- ====== المحتوى الرئيسي ====== -->
+<!-- المحتوى الرئيسي -->
 <main class="main-content" id="mainContent" style="display: none;">
   
   <div class="page-header">
@@ -1331,20 +1197,13 @@
     <span class="date-time" id="currentDateTime"></span>
   </div>
   
-  <!-- ====== بطاقات الإحصائيات ====== -->
+  <!-- بطاقات الإحصائيات -->
   <div class="stats-cards" id="statsCards">
     <div class="stat-card">
       <div class="stat-icon blue"><i class="fas fa-users"></i></div>
       <div class="stat-info">
         <h4>إجمالي المستخدمين</h4>
         <p id="totalUsers">0</p>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon purple"><i class="fas fa-wifi"></i></div>
-      <div class="stat-info">
-        <h4>متصلون الآن</h4>
-        <p id="onlineUsers">0</p>
       </div>
     </div>
     <div class="stat-card">
@@ -1370,19 +1229,16 @@
     </div>
   </div>
   
-  <!-- ====== أزرار التصفية ====== -->
+  <!-- أزرار التصفية -->
   <div class="filter-controls">
-    <input type="text" id="searchInput" placeholder="🔍 بحث عن مستخدم بالاسم أو البريد..." oninput="filterUsers()" />
+    <input type="text" id="searchInput" placeholder="🔍 بحث عن مستخدم..." oninput="filterUsers()" />
     <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">الكل</button>
-    <button class="filter-btn" data-filter="online" onclick="setFilter('online')">🟣 متصلون</button>
     <button class="filter-btn" data-filter="pending" onclick="setFilter('pending')">⏳ تحت المراجعة</button>
     <button class="filter-btn" data-filter="approved" onclick="setFilter('approved')">✅ تمت الموافقة</button>
     <button class="filter-btn" data-filter="blocked" onclick="setFilter('blocked')">🚫 محظور</button>
-    <button class="filter-btn" data-filter="frozen" onclick="setFilter('frozen')">❄️ مجمد</button>
-    <button class="export-btn" onclick="exportData()"><i class="fas fa-file-export"></i> تصدير</button>
   </div>
   
-  <!-- ====== قسم المستخدمين ====== -->
+  <!-- قسم المستخدمين -->
   <div class="users-section">
     <div class="section-title">
       <h3><i class="fas fa-user-friends"></i> المستخدمين</h3>
@@ -1398,7 +1254,7 @@
   
 </main>
 
-<!-- ====== نافذة الإشعارات ====== -->
+<!-- نافذة الإشعارات -->
 <div class="notifications-overlay" id="notificationsOverlay">
   <div class="notifications-panel">
     <div class="panel-header">
@@ -1416,7 +1272,7 @@
   </div>
 </div>
 
-<!-- ====== نافذة تأكيد ====== -->
+<!-- نافذة تأكيد -->
 <div class="modal-overlay" id="confirmModal">
   <div class="modal">
     <h3 id="confirmTitle">تأكيد الإجراء</h3>
@@ -1428,24 +1284,8 @@
   </div>
 </div>
 
-<!-- ====== نافذة تفاصيل المستخدم ====== -->
-<div class="modal fade user-details-modal" id="userDetailsModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title"><i class="fas fa-user-circle me-2"></i> تفاصيل المستخدم</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body" id="userDetailsBody"></div>
-      <div class="modal-footer">
-        <button type="button" class="btn" data-bs-dismiss="modal" style="background:var(--border);border:none;color:var(--text-primary);padding:10px 24px;border-radius:8px;">إغلاق</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
-// ====== بيانات المشرف ======
+// ====== بيانات المشرف (مخفية) ======
 const ADMIN_EMAIL = "hussain.alasari@alfajr.com";
 const ADMIN_PASSWORD = "Hussain@2024AlFajr#Secure";
 
@@ -1617,40 +1457,15 @@ async function sendAdminNotification(type, data) {
 // ====== تحديث الإحصائيات ======
 function updateStats() {
   const regularUsers = allUsers.filter(u => u.role !== 'admin');
-  const online = allUsers.filter(u => u.status === 'online').length;
   const pending = regularUsers.filter(u => u.status === 'pending' || u.status === 'review');
   const approved = regularUsers.filter(u => u.status === 'active' || u.status === 'approved');
   const blocked = regularUsers.filter(u => u.status === 'blocked' || u.status === 'banned');
-  const frozen = regularUsers.filter(u => u.status === 'frozen');
   
   document.getElementById('totalUsers').textContent = regularUsers.length;
-  document.getElementById('onlineUsers').textContent = online;
   document.getElementById('pendingUsers').textContent = pending.length;
   document.getElementById('approvedUsers').textContent = approved.length;
   document.getElementById('blockedUsers').textContent = blocked.length;
   document.getElementById('usersCount').textContent = regularUsers.length;
-}
-
-// ====== تصدير البيانات ======
-function exportData() {
-  const regularUsers = allUsers.filter(u => u.role !== 'admin');
-  if (!regularUsers.length) {
-    showToast('لا توجد بيانات للتصدير', 'warning');
-    return;
-  }
-  
-  let csv = 'الاسم,البريد,الهاتف,الحالة,تاريخ الانضمام,آخر نشاط\n';
-  regularUsers.forEach(u => {
-    csv += `"${u.username || 'غير محدد'}","${u.email || 'غير محدد'}","${u.phone || 'غير محدد'}","${u.status || 'غير محدد'}","${formatDate(u.createdAt)}","${formatDate(u.lastLogin)}"\n`;
-  });
-  
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = `users_${new Date().toISOString().split('T')[0]}.csv`;
-  link.click();
-  URL.revokeObjectURL(link.href);
-  showToast('تم تصدير البيانات بنجاح', 'success');
 }
 
 // ====== تصفية المستخدمين ======
@@ -1674,24 +1489,19 @@ function renderUsers() {
   let filtered = allUsers.filter(u => u.role !== 'admin');
   
   // تطبيق التصفية حسب الحالة
-  if (currentFilter === 'online') {
-    filtered = filtered.filter(u => u.status === 'online');
-  } else if (currentFilter === 'pending') {
+  if (currentFilter === 'pending') {
     filtered = filtered.filter(u => u.status === 'pending' || u.status === 'review');
   } else if (currentFilter === 'approved') {
     filtered = filtered.filter(u => u.status === 'active' || u.status === 'approved');
   } else if (currentFilter === 'blocked') {
     filtered = filtered.filter(u => u.status === 'blocked' || u.status === 'banned');
-  } else if (currentFilter === 'frozen') {
-    filtered = filtered.filter(u => u.status === 'frozen');
   }
   
   // تطبيق البحث
   if (searchTerm) {
     filtered = filtered.filter(u => 
       (u.username || '').toLowerCase().includes(searchTerm) ||
-      (u.email || '').toLowerCase().includes(searchTerm) ||
-      (u.phone || '').toLowerCase().includes(searchTerm)
+      (u.email || '').toLowerCase().includes(searchTerm)
     );
   }
   
@@ -1707,35 +1517,30 @@ function renderUsers() {
   
   grid.innerHTML = filtered.map(user => {
     const status = user.status || 'pending';
-    const statusMap = {
-      'online': { class: 'online', text: '🟣 متصل الآن' },
-      'active': { class: 'active', text: '✅ نشط' },
-      'approved': { class: 'approved', text: '✅ موافق عليه' },
-      'pending': { class: 'pending', text: '⏳ تحت المراجعة' },
-      'review': { class: 'review', text: '🔍 مراجعة' },
-      'blocked': { class: 'blocked', text: '🚫 محظور' },
-      'banned': { class: 'blocked', text: '🚫 محظور' },
-      'frozen': { class: 'frozen', text: '❄️ مجمد' },
-      'inactive': { class: 'inactive', text: '⚪ غير نشط' }
-    };
-    const statusInfo = statusMap[status] || statusMap.pending;
+    const statusClass = status === 'active' || status === 'approved' ? 'approved' :
+                       status === 'blocked' || status === 'banned' ? 'blocked' :
+                       status === 'review' ? 'review' : 'pending';
+    
+    const statusText = {
+      'active': '✅ نشط',
+      'approved': '✅ موافق عليه',
+      'pending': '⏳ تحت المراجعة',
+      'review': '🔍 مراجعة',
+      'blocked': '🚫 محظور',
+      'banned': '🚫 محظور'
+    }[status] || '⏳ تحت المراجعة';
     
     const isBlocked = status === 'blocked' || status === 'banned';
     const isPending = status === 'pending' || status === 'review';
     const isApproved = status === 'active' || status === 'approved';
-    const isFrozen = status === 'frozen';
-    const isOnline = status === 'online';
     
     const firstLetter = (user.username || user.email || 'U').charAt(0).toUpperCase();
-    const avatarHtml = user.photoURL ? 
-      `<img src="${user.photoURL}" alt="">` : 
-      firstLetter;
     
     return `
       <div class="user-card" data-email="${user.email || ''}" data-username="${user.username || ''}">
-        <span class="status-badge ${statusInfo.class}">${statusInfo.text}</span>
+        <span class="status-badge ${statusClass}">${statusText}</span>
         <div class="user-info">
-          <div class="user-avatar">${avatarHtml}</div>
+          <div class="user-avatar">${firstLetter}</div>
           <div class="user-details">
             <h4>${user.username || 'غير محدد'}</h4>
             <p class="email">${user.email || ''}</p>
@@ -1744,12 +1549,8 @@ function renderUsers() {
         <div class="user-meta">
           <span class="meta-item"><i class="fas fa-calendar-alt"></i> ${formatDate(user.createdAt)}</span>
           <span class="meta-item"><i class="fas fa-clock"></i> ${formatDate(user.lastLogin)}</span>
-          <span class="meta-item"><i class="fas fa-shopping-bag"></i> ${user.purchaseCount || 0} مشتريات</span>
         </div>
         <div class="user-actions">
-          <button class="btn-view" onclick="viewUser('${user.uid}')">
-            <i class="fas fa-eye"></i> عرض
-          </button>
           ${isPending ? `
             <button class="btn-approve" onclick="approveUser('${user.uid}')">
               <i class="fas fa-check"></i> موافقة
@@ -1758,22 +1559,14 @@ function renderUsers() {
               <i class="fas fa-times"></i> رفض
             </button>
           ` : ''}
-          ${isApproved || isOnline ? `
+          ${isApproved ? `
             <button class="btn-block" onclick="blockUser('${user.uid}')">
               <i class="fas fa-ban"></i> حظر
-            </button>
-            <button class="btn-freeze" onclick="freezeUser('${user.uid}')">
-              <i class="fas fa-snowflake"></i> تجميد
             </button>
           ` : ''}
           ${isBlocked ? `
             <button class="btn-unblock" onclick="unblockUser('${user.uid}')">
               <i class="fas fa-unlock"></i> فك الحظر
-            </button>
-          ` : ''}
-          ${isFrozen ? `
-            <button class="btn-unfreeze" onclick="unfreezeUser('${user.uid}')">
-              <i class="fas fa-play"></i> إلغاء التجميد
             </button>
           ` : ''}
           <button class="btn-reset" onclick="resetPassword('${user.uid}')">
@@ -1786,72 +1579,6 @@ function renderUsers() {
       </div>
     `;
   }).join('');
-}
-
-// ====== عرض تفاصيل المستخدم ======
-function viewUser(userId) {
-  const user = allUsers.find(u => u.uid === userId);
-  if (!user) return;
-  
-  const statusMap = {
-    'online': '🟣 متصل الآن',
-    'active': '✅ نشط',
-    'approved': '✅ موافق عليه',
-    'pending': '⏳ تحت المراجعة',
-    'review': '🔍 مراجعة',
-    'blocked': '🚫 محظور',
-    'banned': '🚫 محظور',
-    'frozen': '❄️ مجمد',
-    'inactive': '⚪ غير نشط'
-  };
-  
-  const modal = new bootstrap.Modal(document.getElementById('userDetailsModal'));
-  const body = document.getElementById('userDetailsBody');
-  
-  body.innerHTML = `
-    <div class="text-center">
-      <div class="detail-avatar">
-        ${user.photoURL ? `<img src="${user.photoURL}" alt="">` : (user.username || 'U').charAt(0).toUpperCase()}
-      </div>
-      <h4>${user.username || 'غير محدد'}</h4>
-      <span class="status-badge ${user.status || 'pending'}">${statusMap[user.status] || user.status}</span>
-    </div>
-    <hr style="border-color: var(--border);">
-    <div class="detail-row">
-      <span class="label"><i class="fas fa-envelope"></i> البريد الإلكتروني</span>
-      <span class="value">${user.email || 'غير محدد'}</span>
-    </div>
-    <div class="detail-row">
-      <span class="label"><i class="fas fa-phone"></i> رقم الهاتف</span>
-      <span class="value" dir="ltr">${user.phone || 'غير محدد'}</span>
-    </div>
-    <div class="detail-row">
-      <span class="label"><i class="fas fa-calendar-plus"></i> تاريخ الانضمام</span>
-      <span class="value">${formatDate(user.createdAt)}</span>
-    </div>
-    <div class="detail-row">
-      <span class="label"><i class="fas fa-clock"></i> آخر نشاط</span>
-      <span class="value">${formatDate(user.lastLogin)}</span>
-    </div>
-    <div class="detail-row">
-      <span class="label"><i class="fas fa-shopping-bag"></i> عدد المشتريات</span>
-      <span class="value">${user.purchaseCount || 0}</span>
-    </div>
-    ${user.blockedReason ? `
-      <div class="detail-row">
-        <span class="label"><i class="fas fa-info-circle"></i> سبب الحظر</span>
-        <span class="value" style="color: var(--error);">${user.blockedReason}</span>
-      </div>
-    ` : ''}
-    ${user.frozenReason ? `
-      <div class="detail-row">
-        <span class="label"><i class="fas fa-info-circle"></i> سبب التجميد</span>
-        <span class="value" style="color: var(--gold);">${user.frozenReason}</span>
-      </div>
-    ` : ''}
-  `;
-  
-  modal.show();
 }
 
 // ====== تحميل جميع البيانات ======
@@ -1867,16 +1594,6 @@ function loadAllData() {
       snapshot.forEach((childSnapshot) => {
         const userData = childSnapshot.val();
         userData.uid = childSnapshot.key;
-        
-        // حساب عدد المشتريات
-        let purchases = 0;
-        if (userData.orders && typeof userData.orders === 'object') {
-          Object.values(userData.orders).forEach(o => {
-            if (o.status === 'completed' || o.status === 'delivered') purchases++;
-          });
-        }
-        userData.purchaseCount = purchases;
-        
         allUsers.push(userData);
       });
     }
@@ -1980,7 +1697,7 @@ async function blockUser(userId) {
         email: user.email,
         username: user.username,
         action: 'تم حظر المستخدم',
-        details: `تم حظر ${user.email} من قبل المشرف`
+        details: `تم حظر ${user.email} من قبل المشرف بسبب عمليات خاطئة`
       });
       
       showToast(`🚫 تم حظر ${user.username || user.email}`, 'success');
@@ -2008,64 +1725,6 @@ async function unblockUser(userId) {
       });
       
       showToast(`🔓 تم فك حظر ${user.username || user.email}`, 'success');
-    } catch (error) {
-      showToast('❌ حدث خطأ', 'error');
-    }
-  });
-}
-
-async function freezeUser(userId) {
-  const user = allUsers.find(u => u.uid === userId);
-  if (!user) return;
-  
-  if (user.role === 'admin') {
-    showToast('⚠️ لا يمكن تجميد حساب المشرف!', 'error');
-    return;
-  }
-  
-  showConfirm('❄️ تجميد المستخدم', `هل أنت متأكد من تجميد ${user.username || user.email}؟`, async () => {
-    try {
-      const db = window.firebaseDatabase;
-      const userRef = window.firebase.ref(db, 'users/' + userId);
-      await window.firebase.update(userRef, {
-        status: 'frozen',
-        frozenAt: new Date().toISOString(),
-        frozenBy: currentAdmin?.email || 'admin',
-        frozenReason: 'تجميد يدوي من قبل المشرف'
-      });
-      
-      await sendAdminNotification('user_frozen', {
-        email: user.email,
-        username: user.username,
-        action: 'تم تجميد المستخدم',
-        details: `تم تجميد ${user.email} من قبل المشرف`
-      });
-      
-      showToast(`❄️ تم تجميد ${user.username || user.email}`, 'warning');
-    } catch (error) {
-      showToast('❌ حدث خطأ', 'error');
-    }
-  });
-}
-
-async function unfreezeUser(userId) {
-  const user = allUsers.find(u => u.uid === userId);
-  if (!user) return;
-  
-  showConfirm('▶️ إلغاء التجميد', `هل أنت متأكد من إلغاء تجميد ${user.username || user.email}؟`, async () => {
-    try {
-      const db = window.firebaseDatabase;
-      const userRef = window.firebase.ref(db, 'users/' + userId);
-      await window.firebase.update(userRef, {
-        status: 'active',
-        frozenAt: null,
-        frozenBy: null,
-        frozenReason: null,
-        unfrozenAt: new Date().toISOString(),
-        unfrozenBy: currentAdmin?.email || 'admin'
-      });
-      
-      showToast(`▶️ تم إلغاء تجميد ${user.username || user.email}`, 'success');
     } catch (error) {
       showToast('❌ حدث خطأ', 'error');
     }
@@ -2265,9 +1924,6 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
 </script>
 </body>
 </html>
